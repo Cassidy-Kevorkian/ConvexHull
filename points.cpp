@@ -1,40 +1,7 @@
 #include <cmath>
 #include <iostream>
+#include "points.h"
 
-struct Point
-{
-    Point() {
-       x = 0.0;
-       y = 0.0; 
-    }
-    
-    Point(double v1, double v2) {
-        x = v1;
-        y = v2;
-    }
-    
-    double x, y;
-};
-
-
-struct Line
-{
-    Line() {
-        a = 0.0;
-        b = 0.0; 
-        c = 0.0;
-    }   
-
-    Line(double v1, double v2, double v3) {
-        a = v1;
-        b = v2; 
-        c = v3;
-    }
-
-    double a, b, c; //Meaning the line ax + by + c = 0
-};
-
-// Overload the << operator for Point
 std::ostream &operator<<(std::ostream &os, const Point &point)
 {
     os << "(" << point.x << ", " << point.y << ")";
@@ -42,7 +9,7 @@ std::ostream &operator<<(std::ostream &os, const Point &point)
 }
 
 
-// Overload the << operator for Line
+
 std::ostream &operator<<(std::ostream &os, const Line &line)
 {
     if(line.a == 0 && line.c == 0) os << line.b << "y = 0";
