@@ -86,8 +86,8 @@ std::vector<Point> QuickHull(std::vector<Point> points) {
     std::vector<Point> convex_hull; 
     convex_hull.push_back(lowest_point);
     convex_hull.push_back(highest_point);
-
- std::thread t1 = std::thread(&QuickHullRec, std::ref(lowest_point), std::ref(highest_point), std::ref(part_1), std::ref(convex_hull));
+	
+    std::thread t1 = std::thread(&QuickHullRec, std::ref(lowest_point), std::ref(highest_point), std::ref(part_1), std::ref(convex_hull));
     std::thread t2 = std::thread(&QuickHullRec, std::ref(lowest_point), std::ref(highest_point), std::ref(part_2), std::ref(convex_hull));
     
     t1.join(); 
