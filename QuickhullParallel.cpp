@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "points.cpp"
+#include "QuickHullParallel.h"
 #include <thread>
 
 Point FurthestPointFromLineParallel(Line l, std::vector<Point> points, size_t num_points) {
