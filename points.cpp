@@ -70,12 +70,12 @@ double cross_prod(const Point &p1, const Point &q1, const Point &p2, const Point
 
 double dist(const Point &p, const Point &q)
 {
-    return sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y));
+    return std::sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y));
 }
 
 double dist(const Point &p, const Line &l) 
 {
-   return abs(l.a * p.x + l.b * p.y + l.c) / sqrt(l.a * l.a + l.b * l.b);
+   return std::abs(l.a * p.x + l.b * p.y + l.c) / std::sqrt(l.a * l.a + l.b * l.b);
 }
 
 double angle(const Point &p, const Point &ref)
