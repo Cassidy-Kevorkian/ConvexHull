@@ -1,7 +1,10 @@
 #include <iostream>
-#include "GrahamScan.cpp"
-#include "QuickHull.cpp"
-#include "QuickHullParallel.cpp"
+#include <vector>
+#include "points.h"
+#include "GrahamScan.h"
+#include "QuickHull.h"
+#include "QuickHullParallel.h"
+
 
 
 int main()
@@ -39,9 +42,7 @@ int main()
     for(Point point : convex_hull_quick_hull_parallel) {
         std::cout << point << std::endl;     
     }
-
-
-
+    
     return 0;
 }
 
