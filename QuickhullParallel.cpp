@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "points.cpp"
+#include "points.h"
 #include "QuickHullParallel.h"
 #include <thread>
 
