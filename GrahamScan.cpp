@@ -3,7 +3,8 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
-#include "points.cpp"
+#include "GrahamScan.h"
+#include "points.h"
 
 
 void remove_colinear(std::vector<Point> &points, Point ref)
