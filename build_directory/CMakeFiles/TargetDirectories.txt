@@ -1,0 +1,7 @@
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/convex_hull.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/quick_hull.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/quick_hull_parallel.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/points.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/graham_scan.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/edit_cache.dir
+/home/johnnyventuras/Desktop/EcolePolytechniqueLocal/ConvexHull/build_directory/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libquick_hull.a CMakeFiles/quick_hull.dir/QuickHull.cpp.o
+/usr/bin/ranlib libquick_hull.a
