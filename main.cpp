@@ -7,8 +7,8 @@
 #include "tests/tests.cpp"
 
 int main()
-{
-    generate_tests(1000, "basic");
+{ 
+    generate_tests(1000, 0.1);
     std::cout << "Please enter the number of points:" << std::endl;
     size_t num_points;
     std::cin >> num_points;
