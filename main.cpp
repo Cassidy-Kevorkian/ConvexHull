@@ -4,11 +4,11 @@
 #include "GrahamScan.h"
 #include "QuickHull.h"
 #include "QuickHullParallel.h"
-
-
+#include "tests/tests.cpp"
 
 int main()
 {
+    generate_tests(1000, "basic");
     std::cout << "Please enter the number of points:" << std::endl;
     size_t num_points;
     std::cin >> num_points;
