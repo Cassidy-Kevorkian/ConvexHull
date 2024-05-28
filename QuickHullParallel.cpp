@@ -98,7 +98,7 @@ void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &po
     t2.join();
 }
 
-std::vector<Point> QuickHullParallel(std::vector<Point> points) {
+std::vector<Point> QuickHullParallel(std::vector<Point> &points) {
     size_t num_points = points.size();
     Point highest_point = points[0], lowest_point = points[0];
 

@@ -30,7 +30,7 @@ Point before_top(std::stack<Point> &stack) {
     return before_top;
 }
 
-std::vector<Point> GrahamScan(std::vector<Point> points) {
+std::vector<Point> GrahamScan(std::vector<Point> &points) {
     // We first find the point with the least y coordinate, name it P
     Point P = points[0];
     for (auto point : points) {

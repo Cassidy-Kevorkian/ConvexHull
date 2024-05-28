@@ -29,7 +29,7 @@ std::ostream &operator<<(std::ostream &os, const Line &line) {
     return os;
 }
 
-bool Point::operator==(const Point &other) {
+bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
 
@@ -102,4 +102,8 @@ Line generate_line(const Point &p, const Point &q) {
 
     return Line((q.y - p.y) / (p.x - q.x), 1,
                 (q.y * p.x - p.y * q.x) / (q.x - p.x));
+}
+
+size_t pointHash::operator()(const Point &p) const {
+    return std::hash<double>()(p.x) ^ std::hash<double>()(p.y);
 }
