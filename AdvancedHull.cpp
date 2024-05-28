@@ -2,9 +2,8 @@
 
 int main() { 
 
-    std::cout << "dick cheese for dinner" << std::endl;
-//mamasita por favoros
     int caka;
+    std::cout << "dick cheese for dinner in my ass" << std::endl;
     return 0; 
 
 
