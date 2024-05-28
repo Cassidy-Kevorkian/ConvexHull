@@ -25,6 +25,7 @@ void run_file(const std::string& file_name){
     }    
     std::vector<Point> convex_hull_graham_scan = GrahamScan(points);
     //std::cout << std::endl << "GrahamScan convex hull:" << std::endl;
+    file1 << convex_hull_graham_scan.size() << std::endl;
     for(Point point : convex_hull_graham_scan) {
         file1 << point << std::endl;     
     }
@@ -38,6 +39,7 @@ void run_file(const std::string& file_name){
     }    
     std::vector<Point> convex_hull_quick_hull = QuickHull(points);
     //std::cout << std::endl << "QuickHull convex hull:" << std::endl;
+    file2 << convex_hull_quick_hull.size() << std::endl;
     for(Point point : convex_hull_quick_hull) {
         file2 << point << std::endl;     
     }
@@ -51,6 +53,7 @@ void run_file(const std::string& file_name){
     }
     std::vector<Point> convex_hull_quick_hull_parallel = QuickHullParallel(points);
     //std::cout << std::endl << "QuickHullParallel convex hull:" << std::endl;
+    file3 << convex_hull_quick_hull_parallel.size() << std::endl;
     for(Point point : convex_hull_quick_hull_parallel) {
         file3 << point << std::endl;     
     }

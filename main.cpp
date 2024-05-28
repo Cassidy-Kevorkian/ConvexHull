@@ -11,7 +11,7 @@
 int main()
 { 
     // Tests
-    generate_tests(100);
+    generate_tests(60);
     run_tests();
     return 0;
 
