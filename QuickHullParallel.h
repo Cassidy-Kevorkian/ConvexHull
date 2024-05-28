@@ -19,6 +19,6 @@ std::vector<Point> GeneratePointsOutsideParallel(const Point &p, const Point &q,
 void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &points,
                           std::vector<Point> &convex_hull, int rec_depth);
 
-std::vector<Point> QuickHullParallel(std::vector<Point> points);
+std::vector<Point> QuickHullParallel(std::vector<Point> &points);
 
 #endif

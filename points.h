@@ -12,7 +12,7 @@ public:
 
     Point operator-(const Point &other);
     Point operator+(const Point &other);
-    bool operator==(const Point &other);
+    bool operator==(const Point &other) const;
     double x, y;
 
 };
@@ -56,5 +56,9 @@ bool are_colinear(const Point &p, const Point &q, const Point &r);
 bool is_convex(const Point &p, const Point &q, const Point &r);
 
 Line generate_line(const Point &p, const Point &q);
+
+struct pointHash {
+    size_t operator()(const Point &p) const;
+};
 
 #endif

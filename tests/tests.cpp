@@ -5,8 +5,11 @@
 #include <iostream>
 #include <points.h>
 #include <random>
+#include <unordered_set>
+#include "tests.h"
 
 // main takes two parameters n and the type of test
+namespace test {
 void generate_tests_helper(
     int n, const std::string &type) { // open a file to write the test cases
     double ratio;
@@ -64,3 +67,50 @@ void generate_tests(int n) {
     generate_tests_helper(n, "average");
     generate_tests_helper(n, "many");
 }
+
+void check_test(const std::string &input_test, const std::string &correction,
+                std::vector<Point> F(std::vector<Point> &)) {
+
+    std::ifstream input_file(input_test), correct_file(correction);
+
+    int number_tests;
+    double a, b;
+
+    input_file >> number_tests;
+
+    std::vector<Point> test_points(number_tests);
+
+    for (size_t i = 0; i < number_tests; ++i) {
+        input_file >> a >> b;
+        test_points[i] = Point(a, b);
+    }
+
+    std::cout << test_points.size();
+
+    std::vector<Point> result = F(test_points);
+
+
+    std::unordered_set<Point, pointHash> my_result;
+    for (const auto &point : result) {
+        my_result.emplace(point);
+    }
+
+    std::unordered_set<Point, pointHash> correct_result;
+
+    correct_file >> number_tests;
+
+     for (size_t i = 0; i < number_tests; ++i) {
+         correct_file >> a >> b;
+         correct_result.emplace(Point(a, b));
+     }
+
+    if (correct_result != my_result) {
+        std::cout << "Test failed\n";
+    } else {
+        std::cout << "Test succeded\n";
+    }
+    
+}
+
+
+} // namespace test
