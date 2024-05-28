@@ -1,3 +1,6 @@
 #include <bits/stdc++.h>
 
-int main() { return 0; }
+int main() { 
+    std::cout << "Muie la cassidy in cur";
+    return 0;
+}
