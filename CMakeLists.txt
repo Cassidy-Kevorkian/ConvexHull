@@ -3,6 +3,7 @@ project(ConvexHull)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD_REQUIRED 17)
+set(CMAKE_BUILD_TYPE Release)
 
 
 add_executable(convex_hull main.cpp)

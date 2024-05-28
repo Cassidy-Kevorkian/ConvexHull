@@ -29,9 +29,30 @@ std::ostream &operator<<(std::ostream &os, const Line &line) {
     return os;
 }
 
+bool Point::operator==(const Point &other) {
+    return x == other.x && y == other.y;
+}
+
+Point Point::operator+(const Point &other) {
+    return Point(x + other.x, y + other.y);
+}
+
+Point Point::operator-(const Point &other) {
+    return Point(x - other.x, y - other.y);
+}
+
 double dot_prod(const Point &p1, const Point &q1, const Point &p2,
                 const Point &q2) {
     return (q1.x - p1.x) * (q2.x - p2.x) + (q1.y - p1.y) * (q2.y - p2.y);
+}
+
+double dot_prod(const Point &p1, const Point &q1){
+    return p1.x * q1.x + p1.y * q1.y;
+}
+
+double cross_prod(const Point &p1, const Point &q1) {
+    return p1.x * q1.y - p1.y*q1.x; 
+
 }
 
 double cross_prod(const Point &p1, const Point &q1, const Point &p2,

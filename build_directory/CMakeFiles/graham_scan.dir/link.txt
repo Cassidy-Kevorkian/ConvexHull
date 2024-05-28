@@ -1,0 +1,2 @@
+/usr/bin/ar qc libgraham_scan.a CMakeFiles/graham_scan.dir/GrahamScan.cpp.o
+/usr/bin/ranlib libgraham_scan.a
