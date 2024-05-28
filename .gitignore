@@ -1,3 +1,5 @@
 
 build_directory
 .cache
+cache*
+compile_commands.json
