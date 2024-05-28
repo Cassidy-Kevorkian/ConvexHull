@@ -1,2 +1,0 @@
-/usr/bin/ar qc libquick_hull_parallel.a CMakeFiles/quick_hull_parallel.dir/QuickHullParallel.cpp.o
-/usr/bin/ranlib libquick_hull_parallel.a
