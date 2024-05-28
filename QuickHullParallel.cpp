@@ -3,6 +3,9 @@
 #include <iostream>
 #include <thread>
 #include <vector>
+#include <mutex>
+
+std::mutex lock;
 
 Point FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
                                     size_t num_points) {
@@ -59,7 +62,7 @@ std::vector<Point> GeneratePointsOutsideParallel(const Point &p, const Point &q,
 }
 
 void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &points,
-                          std::vector<Point> &convex_hull) {
+                          std::vector<Point> &convex_hull, int rec_depth) {
     size_t num_points = points.size();
 
     if (num_points == 0)
@@ -67,19 +70,29 @@ void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &po
 
     Line l = generate_line(p, q);
     Point furthest_point = FurthestPointFromLineParallel(l, points, num_points);
+    lock.lock();
     convex_hull.push_back(furthest_point);
+    lock.unlock();
 
     std::vector<Point> part_1 =
         GeneratePointsOutsideParallel(p, q, furthest_point, points, num_points);
     std::vector<Point> part_2 =
         GeneratePointsOutsideParallel(q, p, furthest_point, points, num_points);
+    
+    if(rec_depth > 3) {
+        QuickHullParallelRec(p, furthest_point, part_1, convex_hull, rec_depth);
+        QuickHullParallelRec(q, furthest_point, part_2, convex_hull, rec_depth);
+        return;
+    }
+    
+    ++rec_depth;
 
     std::thread t1 = std::thread(&QuickHullParallelRec, std::ref(p),
                                  std::ref(furthest_point), std::ref(part_1),
-                                 std::ref(convex_hull));
+                                 std::ref(convex_hull), rec_depth);
     std::thread t2 = std::thread(&QuickHullParallelRec, std::ref(q),
                                  std::ref(furthest_point), std::ref(part_2),
-                                 std::ref(convex_hull));
+                                 std::ref(convex_hull), rec_depth);
 
     t1.join();
     t2.join();
@@ -106,13 +119,13 @@ std::vector<Point> QuickHullParallel(std::vector<Point> points) {
     std::vector<Point> convex_hull;
     convex_hull.push_back(lowest_point);
     convex_hull.push_back(highest_point);
-
+    int rec_depth = 0;
     std::thread t1 = std::thread(&QuickHullParallelRec, std::ref(lowest_point),
                                  std::ref(highest_point), std::ref(part_1),
-                                 std::ref(convex_hull));
+                                 std::ref(convex_hull), rec_depth);
     std::thread t2 = std::thread(&QuickHullParallelRec, std::ref(lowest_point),
                                  std::ref(highest_point), std::ref(part_2),
-                                 std::ref(convex_hull));
+                                 std::ref(convex_hull), rec_depth);
 
     t1.join();
     t2.join();
