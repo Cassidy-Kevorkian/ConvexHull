@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-Point FurthestPointFromLineParallel(Line l, std::vector<Point> points,
+Point FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
                                     size_t num_points) {
     Point furthest_point = points[0];
 
@@ -18,7 +18,7 @@ Point FurthestPointFromLineParallel(Line l, std::vector<Point> points,
 }
 
 std::vector<std::vector<Point>>
-GeneratePartitionParallel(Point p, Point q, std::vector<Point> points,
+GeneratePartitionParallel(const Point &p, const Point &q, std::vector<Point> &points,
                           size_t num_points) {
     std::vector<std::vector<Point>> partition;
     std::vector<Point> part_1, part_2;
@@ -39,9 +39,9 @@ GeneratePartitionParallel(Point p, Point q, std::vector<Point> points,
     return {part_1, part_2};
 }
 
-std::vector<Point> GeneratePointsOutsideParallel(Point p, Point q,
-                                                 Point furthest_point,
-                                                 std::vector<Point> points,
+std::vector<Point> GeneratePointsOutsideParallel(const Point &p, const Point &q,
+                                                 Point &furthest_point,
+                                                 std::vector<Point> &points,
                                                  size_t num_points) {
     std::vector<Point> points_outside;
 
@@ -58,7 +58,7 @@ std::vector<Point> GeneratePointsOutsideParallel(Point p, Point q,
     return points_outside;
 }
 
-void QuickHullParallelRec(Point p, Point q, std::vector<Point> points,
+void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &points,
                           std::vector<Point> &convex_hull) {
     size_t num_points = points.size();
 
