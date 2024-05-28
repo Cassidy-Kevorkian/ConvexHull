@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 
 int main() { 
-    std::cout << "Muie la cassidy in cur";
-    return 0;
+
+    std::cout << "dick cheese for dinner in my ass" << std::endl;
+    return 0; 
+
+
 }
