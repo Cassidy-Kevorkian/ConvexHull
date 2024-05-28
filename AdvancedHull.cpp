@@ -1,3 +1,9 @@
 #include <bits/stdc++.h>
 
-int main() { return 0; }
+int main() { 
+
+    std::cout << "dick cheese for dinner" << std::endl;
+    return 0; 
+
+
+}
