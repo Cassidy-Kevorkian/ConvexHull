@@ -1,3 +1,4 @@
 build_directory/**
 .cache/**
 compile_commands.json
+cmake_install.cmake
