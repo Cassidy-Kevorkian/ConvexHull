@@ -1,4 +1,6 @@
 // generate n concentric points on a circle and add them in tests.txt
+#include "tests.h"
+#include <chrono>
 #include <cmath>
 #include <ctime>
 #include <fstream>
@@ -6,7 +8,6 @@
 #include <points.h>
 #include <random>
 #include <unordered_set>
-#include "tests.h"
 
 // main takes two parameters n and the type of test
 namespace test {
@@ -52,7 +53,7 @@ void generate_tests_helper(
         file2 << x << " " << y << std::endl;
     }
 
-    radius = 8;
+    radius = 8.;
 
     for (size_t i = 0; i < n - hull_points; ++i) {
         double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
@@ -79,8 +80,13 @@ void check_test(const std::string &input_test, const std::string &correction,
                 std::vector<Point> F(std::vector<Point> &)) {
 
     std::ifstream input_file(input_test), correct_file(correction);
+    if (!input_file.is_open()) {
+        std::cerr << "Error opening first file" << std::endl;
+        return;
+    }
 
     int number_tests;
+
     double a, b;
 
     input_file >> number_tests;
@@ -92,10 +98,13 @@ void check_test(const std::string &input_test, const std::string &correction,
         test_points[i] = Point(a, b);
     }
 
-    std::cout << test_points.size();
+    input_file.close();
 
+    auto start = std::chrono::steady_clock::now();
     std::vector<Point> result = F(test_points);
-
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> timer = end - start;
+    std::cout << timer.count() << " ";
 
     std::unordered_set<Point, pointHash> my_result;
     for (const auto &point : result) {
@@ -103,21 +112,27 @@ void check_test(const std::string &input_test, const std::string &correction,
     }
 
     std::unordered_set<Point, pointHash> correct_result;
+    if (!correct_file.is_open()) {
+        std::cerr << "Error opening the second file" << std::endl;
+        return;
+    }
 
     correct_file >> number_tests;
 
-     for (size_t i = 0; i < number_tests; ++i) {
-         correct_file >> a >> b;
-         correct_result.emplace(Point(a, b));
-     }
+    for (size_t i = 0; i < number_tests; ++i) {
+        correct_file >> a >> b;
+        correct_result.emplace(Point(a, b));
+    }
+
 
     if (correct_result != my_result) {
         std::cout << "Test failed\n";
     } else {
         std::cout << "Test succeded\n";
     }
-    
-}
 
+    std::cout << correct_result.size() << " " << my_result.size();
+    correct_file.close();
+}
 
 } // namespace test

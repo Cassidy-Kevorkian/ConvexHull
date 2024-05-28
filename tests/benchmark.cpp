@@ -82,9 +82,9 @@ void run_file(const std::string &file_name) {
 }
 
 void run_tests() {
-     run_file("../tests/test_few.txt");
-     run_file("../tests/test_average.txt");
-     run_file("../tests/test_many.txt");
+      run_file("../tests/test_few.txt");
+      run_file("../tests/test_average.txt");
+      run_file("../tests/test_many.txt");
 
-    test::check_test("test_many.txt", "correction_many.txt", GrahamScan);
+    test::check_test("../tests/test_many.txt", "../tests/correction_many.txt", GrahamScan);
 }

@@ -11,7 +11,7 @@
 int main()
 { 
     // Tests
-    test::generate_tests(60);
+    test::generate_tests(6000);
     run_tests();
     return 0;
 
