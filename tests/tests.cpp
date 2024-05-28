@@ -45,6 +45,7 @@ void generate_tests_helper(int n, const std::string& type)
         //print points to file
         file << x << " " << y << std::endl;
     }
+    radius = 8;
 
     for (size_t i = 0; i < n - hull_points; ++i)
     {
