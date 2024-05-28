@@ -4,26 +4,65 @@
 #include <fstream>
 #include <iostream>
 #include <random>
-#include <vector>
+#include <ctime>
+#include "../points.h"
 
-// main takes two parameters n and the type of test
-std::vector<Point> generate_tests(int n, double ratio) {
+
+//main takes two parameters n and the type of test
+void generate_tests_helper(int n, const std::string& type)
+{ //open a file to write the test cases
+    double ratio;
+    if (type == "few"){
+        ratio = 0.1;
+    }
+    else if (type == "average"){
+        ratio = 0.5;
+    }
+    else if (type == "many"){
+        ratio = 0.9;
+    }
+    else{
+        std::cerr << "Invalid type" << std::endl;
+        return;
+    }
+
+    std::ofstream file("../tests/test_" + type + ".txt");
+    if (!file.is_open())
+    {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }    
+    file << n << std::endl;
     std::vector<Point> points;
+    int hull_points = n * ratio;
     double radius = 10.0;
     double x_center = 0.0;
     double y_center = 0.0;
-    for (size_t i = 0; i < n; ++i) {
-        double x = x_center + radius * std::cos(2 * M_PI * i / n);
-        double y = y_center + radius * std::sin(2 * M_PI * i / n);
-        points.push_back(Point(x, y));
+    for (size_t i = 0; i < hull_points; ++i)
+    {
+        double x = x_center + radius * std::cos(2 * M_PI * i / hull_points);
+        double y = y_center + radius * std::sin(2 * M_PI * i / hull_points);
+        //print points to file
+        file << x << " " << y << std::endl;
     }
-    // generate n*ratio random points inside the circle
-    for (size_t i = 0; i < n * ratio; ++i) {
-        double x = (rand() % 2001 - 1000) / 100.0;
-        double y = (rand() % 2001 - 1000) / 100.0;
-        if (x * x + y * y <= radius * radius) {
-            points.push_back(Point(x, y));
-        }
+
+    for (size_t i = 0; i < n - hull_points; ++i)
+    {
+        double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+        double rand_radius = radius * sqrt((double)rand() / RAND_MAX);
+    
+        double x = rand_radius * cos(angle);
+        double y = rand_radius * sin(angle);
+        //print points to file
+        file << x << " " << y << std::endl;
     }
-    return points;
+    file.close();
+}
+
+void generate_tests(int n){
+    srand(time(0));
+
+    generate_tests_helper(n, "few");
+    generate_tests_helper(n, "average");
+    generate_tests_helper(n, "many");
 }

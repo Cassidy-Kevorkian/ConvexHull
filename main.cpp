@@ -3,47 +3,53 @@
 #include "QuickHullParallel.h"
 #include "points.h"
 #include "tests/tests.cpp"
-#include <iostream>
-#include <vector>
+#include "tests/benchmark.cpp"
 
-int main() {
-    generate_tests(1000, 0.1);
-    std::cout << "Please enter the number of points:" << std::endl;
-    size_t num_points;
-    std::cin >> num_points;
-    std::cout << "Enter the points one by one in the  format x y:" << std::endl;
-    std::vector<Point> points;
+#define TEST 0 // 0 for automated tests, 1 for user input
+#define CORRECT 0 // 1 for correctness check
 
-    for (int i = 0; i < num_points; ++i) {
-        double x, y;
-        std::cin >> x;
-        std::cin >> y;
-        points.push_back(Point(x, y));
-    }
-
-    std::vector<Point> convex_hull_graham_scan = GrahamScan(points);
-    std::cout << std::endl << "GrahamScan convex hull:" << std::endl;
-
-    for (Point point : convex_hull_graham_scan) {
-        std::cout << point << std::endl;
-    }
-
-    std::vector<Point> convex_hull_quick_hull = QuickHull(points);
-    std::cout << std::endl << "QuickHull convex hull:" << std::endl;
-
-    for (Point point : convex_hull_quick_hull) {
-        std::cout << point << std::endl;
-    }
-
-    std::vector<Point> convex_hull_quick_hull_parallel =
-        QuickHullParallel(points);
-    std::cout << std::endl << "QuickHullParallel convex hull:" << std::endl;
-
-    for (Point point : convex_hull_quick_hull_parallel) {
-        std::cout << point << std::endl;
-    }
-
+int main()
+{ 
+    // Tests
+    generate_tests(100);
+    run_tests();
     return 0;
+
+    // // User input
+    // std::cout << "Please enter the number of points:" << std::endl;
+    // size_t num_points;
+    // std::cin >> num_points;
+    // std::cout << "Enter the points one by one in the  format x y:" << std::endl;
+    // std::vector<Point> points; 
+    
+    // for(int i = 0; i < num_points; ++i) {
+    //     double x, y;
+    //     std::cin >> x;
+    //     std::cin >> y;
+    //     points.push_back(Point(x, y));
+    // }
+    
+    // std::vector<Point> convex_hull_graham_scan = GrahamScan(points);
+    // std::cout << std::endl << "GrahamScan convex hull:" << std::endl;
+    
+    // for(Point point : convex_hull_graham_scan) {
+    //     std::cout << point << std::endl;     
+    // }
+    
+    // std::vector<Point> convex_hull_quick_hull = QuickHull(points);
+    // std::cout << std::endl << "QuickHull convex hull:" << std::endl;
+    
+    // for(Point point : convex_hull_quick_hull) {
+    //     std::cout << point << std::endl;     
+    // }
+
+    // std::vector<Point> convex_hull_quick_hull_parallel = QuickHullParallel(points);
+    // std::cout << std::endl << "QuickHullParallel convex hull:" << std::endl;
+    
+    // for(Point point : convex_hull_quick_hull_parallel) {
+    //     std::cout << point << std::endl;     
+    // }
+    // }
 }
 
 /*
