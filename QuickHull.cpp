@@ -24,9 +24,6 @@ std::vector<std::vector<Point>> GeneratePartition(Point &p, Point &q,
 
     for (int i = 0; i < points.size(); ++i) {
 
-        //if (((p.x == points[i].x) && (p.y == points[i].y)) ||
-            //((q.x == points[i].x) && (q.y == points[i].y)))
-            //continue;
         if (p == points[i] || q == points[i])
             continue;
 
@@ -45,10 +42,6 @@ std::vector<Point> GeneratePointsOutside(Point &p, Point &q, Point &furthest_poi
     std::vector<Point> points_outside;
     
     for (int i = 0; i < points.size(); ++i) {
- //
-         //if ((furthest_point.x == points[i].x) &&
-             //(furthest_point.y == points[i].y))
-             //continue;
 
         if(furthest_point == points[i]) continue;
 
