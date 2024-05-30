@@ -1,7 +1,6 @@
 #include "QuickHull.h"
 #include "points.h"
 #include <iostream>
-
 #include <vector>
 
 Point FurthestPointFromLine(Line &l, std::vector<Point> &points){
