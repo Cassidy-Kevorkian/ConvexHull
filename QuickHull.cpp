@@ -3,6 +3,8 @@
 #include <iostream>
 #include <vector>
 
+const double tolerance = 1e-10;
+
 Point FurthestPointFromLine(Line &l, std::vector<Point> &points){
 
     Point furthest_point = points[0];
@@ -26,7 +28,7 @@ std::vector<std::vector<Point>> GeneratePartition(Point &p, Point &q,
         if (p == points[i] || q == points[i])
             continue;
 
-        if (cross_prod(p, q, p, points[i]) >= 0)
+        if (cross_prod(q - p, points[i] - p) >= 0)
             part_1.push_back(points[i]);
 
         else
@@ -44,7 +46,7 @@ std::vector<Point> GeneratePointsOutside(Point &p, Point &q, Point &furthest_poi
 
         if(furthest_point == points[i]) continue;
 
-        if (angle(p, q, p, furthest_point) <= angle(p, q, p, points[i]))
+        if (cross_prod(q - p, furthest_point - p) * cross_prod(furthest_point - p, points[i] - p) >= -tolerance)
             points_outside.push_back(points[i]);
     }
 
