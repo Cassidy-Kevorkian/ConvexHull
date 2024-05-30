@@ -9,9 +9,9 @@
 
 int main() {
     // Tests
-    test::generate_tests(4000);
+    test::generate_tests(50000);
     test::run_tests();
-    test::compare_files("../tests/test_many_GS.txt",
+    test::compare_files("../tests/test_many_QH.txt",
                         "../tests/correction_many.txt");
     return 0;
 

@@ -278,6 +278,8 @@ void test::compare_files(const std::string &file1, const std::string &file2){
     for(size_t i = 0; i < lines_a.size(); ++i) {
         printf("(%10f,  %10f) || (%10f, %10f)\n", lines_a[i].first, lines_a[i].second, lines_b[i].first, lines_b[i].second);
     }
+    printf("%25zu ||  %22zu\n", lines_a.size(), lines_b.size());
+    printf("%25s || %22s", file1.c_str(), file2.c_str());
     std::cout <<"\n";
 
     
