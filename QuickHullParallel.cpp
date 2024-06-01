@@ -79,7 +79,7 @@ void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &po
     std::vector<Point> part_2 =
         GeneratePointsOutsideParallel(q, p, furthest_point, points, num_points);
     
-    if(rec_depth > 3) {
+    if(rec_depth > 4) {
         QuickHullParallelRec(p, furthest_point, part_1, convex_hull, rec_depth);
         QuickHullParallelRec(q, furthest_point, part_2, convex_hull, rec_depth);
         return;
