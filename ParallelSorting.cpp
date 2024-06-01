@@ -3,7 +3,7 @@
 #include <iostream>
 #include <algorithm>
 
-int NPROC = 2;
+int NPROC = 8;
 
 void merge(std::vector<double> &elements, const int left, const int mid, const int right) {
 	int i = left, j = mid;	
@@ -11,7 +11,6 @@ void merge(std::vector<double> &elements, const int left, const int mid, const i
 	int k = 0;
 
 	while(i < mid || j < right) {
-		std::cout<< i << " " << j << std::endl;
 
 		if(i == mid) {
 			merged_elements[k++] = elements[j];
