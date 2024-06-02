@@ -23,7 +23,7 @@ namespace GrahamParallel {
 	};
 
 
-	std::vector<*DoublyLinkedPoint> Convexify(DoublyLinkedPoint *begin, DoublyLinkedPoint *end, int num_points) {
+	void Convexify(DoublyLinkedPoint *begin, DoublyLinkedPoint *end, int num_points) {
 		DoublyLinkedPoint *pred = begin,
 						  *curr = begin -> next;
 
@@ -40,7 +40,6 @@ namespace GrahamParallel {
 			pred = pred -> next;
 		}
 
-		return {begin, curr};
 	}
 
 
@@ -71,28 +70,26 @@ namespace GrahamParallel {
 		std::vector<*DoublyLinkedPoint> convex_arc;
 
 		if(num_points <= chunk_sz) {
-			convex_arc = Convexify(begin, end, num_points);
+			Convexify(begin, end, num_points);
 
-			return convex_arc;
+			return {begin, end};
 		}
 
-		else {
-			int num_points_left = num_points / 2, 
-				num_points_right = num_points - num_points - left;
-			DoublyLinkedPoint *mid = begin;
+		int num_points_left = num_points / 2, 
+			num_points_right = num_points - num_points - left;
+		DoublyLinkedPoint *mid = begin;
 
-			for(int i = 0; i < num_points_left; ++i) {
-				mid = mid -> next;
-			}
-
-			std::vector<*DoublyLinkedPoint> convex_arc_left = ConvexHullRec(begin, num_points_left, chunk_sz), 
-									   convex_arc_right = ConvexHullRec(mid, num_points_right, chunk_sz);
-
-			convex_arc = Merge(convex_arc_left[0], 
-							   convex_arc_left[1], 
-							   convex_arc_right[0],
-							   convex_arc_right[1]);
+		for(int i = 0; i < num_points_left; ++i) {
+			mid = mid -> next;
 		}
+
+		std::vector<*DoublyLinkedPoint> convex_arc_left = ConvexHullRec(begin, mid -> prev, num_points_left, chunk_sz), 
+							            convex_arc_right = ConvexHullRec(mid, end, num_points_right, chunk_sz);
+
+		convex_arc = Merge(convex_arc_left[0], 
+						   convex_arc_left[1], 
+						   convex_arc_right[0],
+						   convex_arc_right[1]);
 
 		return convex_arc;
 	}
