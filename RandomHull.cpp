@@ -13,14 +13,21 @@ bool random_hull::multimap<Key, Tp>::insert_and_set(const Key &key,
 
     size_t entry = get_entry(key);
 
+    bool ret_value = true;
+
     while(!__table[entry].taken.compare_exchange_strong(expect, true)) {
+
+        if(__table[entry].get_key() == key) {
+            ret_value = false;
+        }
+
         expect = false;
         entry = increment(entry);
     }
 
     __table[entry].set_data(key, value);
 
-    return true;
+    return ret_value;
 
 }
 
@@ -32,6 +39,11 @@ void random_hull::Entry<Key, Tp>::set_data(const Key &key, const Tp &value) {
 template <typename Key, typename Tp>
 const Key& random_hull::Entry<Key, Tp>::get_key() {
     return data.first;
+}
+
+template <typename Key, typename Tp>
+const Tp& random_hull::Entry<Key, Tp>::get_value() {
+    return data.second;
 }
 
 
