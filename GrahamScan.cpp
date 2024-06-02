@@ -54,9 +54,9 @@ std::vector<Point> GrahamScan(std::vector<Point> &points) {
 
     for (size_t i = 1; i < points.size(); ++i) {
         Point point = points[i];
-        if (!is_convex(before_top(stack), stack.top(), point)) {
-            stack.pop();
-        }
+        //if (!is_convex(before_top(stack), stack.top(), point)) {
+         //   stack.pop();
+        //}
         while (stack.size() > 1 &&
                !is_convex(before_top(stack), stack.top(), point)) {
             stack.pop();
