@@ -12,9 +12,13 @@ std::vector<Facet> convex_hull(const std::vector<Point> &points);
 template <typename Key, typename Tp> class Entry {
   public:
     std::pair<Key, Tp> data;
-    std::atomic<bool> taken;
-    std::atomic_flag check;
+    std::atomic<bool> taken{false};
+
+    //std::atomic_flag check;
+
     void set_data(const Key &key, const Tp &value);
+    const Key& get_key();
+    const Tp& get_value();
 };
 
 template <typename Key, typename Tp> class multimap {
