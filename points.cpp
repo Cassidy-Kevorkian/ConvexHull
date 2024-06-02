@@ -1,9 +1,10 @@
 #include "points.h"
 #include <cmath>
 #include <iostream>
+#include <cstdint>
 
 std::ostream &operator<<(std::ostream &os, const Point &point) {
-    os  << point.x << " " << point.y ;
+    os << point.x << " " << point.y;
     return os;
 }
 
@@ -46,13 +47,12 @@ double dot_prod(const Point &p1, const Point &q1, const Point &p2,
     return (q1.x - p1.x) * (q2.x - p2.x) + (q1.y - p1.y) * (q2.y - p2.y);
 }
 
-double dot_prod(const Point &p1, const Point &q1){
+double dot_prod(const Point &p1, const Point &q1) {
     return p1.x * q1.x + p1.y * q1.y;
 }
 
 double cross_prod(const Point &p1, const Point &q1) {
-    return p1.x * q1.y - p1.y*q1.x; 
-
+    return p1.x * q1.y - p1.y * q1.x;
 }
 
 double cross_prod(const Point &p1, const Point &q1, const Point &p2,
@@ -104,6 +104,4 @@ Line generate_line(const Point &p, const Point &q) {
                 (q.y * p.x - p.y * q.x) / (q.x - p.x));
 }
 
-size_t pointHash::operator()(const Point &p) const {
-    return std::hash<double>()(p.x) ^ std::hash<double>()(p.y);
-}
+

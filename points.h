@@ -2,6 +2,7 @@
 #define POINTS_H
 #include <cmath>
 #include <iostream>
+#include <cstdint>
 
 class Point {
 private:
@@ -57,8 +58,16 @@ bool is_convex(const Point &p, const Point &q, const Point &r);
 
 Line generate_line(const Point &p, const Point &q);
 
-struct pointHash {
-    size_t operator()(const Point &p) const;
-};
+namespace std {
+
+    template<>
+    class hash<Point> {
+        public:
+        std::uint64_t operator()(const Point &p) const {
+            return std::hash<double>()(p.x) ^ std::hash<double>()(p.y);
+    }
+    };
+
+}
 
 #endif
