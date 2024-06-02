@@ -20,11 +20,18 @@ bool random_hull::multimap<Key, Tp>::insert_and_set(const Key &key,
 
     __table[entry].set_data(key, value);
 
+    return true;
+
 }
 
 template <typename Key, typename Tp>
 void random_hull::Entry<Key, Tp>::set_data(const Key &key, const Tp &value) {
     data = std::make_pair(key, value);
+}
+
+template <typename Key, typename Tp>
+const Key& random_hull::Entry<Key, Tp>::get_key() {
+    return data.first;
 }
 
 

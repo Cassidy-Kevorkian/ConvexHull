@@ -15,6 +15,7 @@ template <typename Key, typename Tp> class Entry {
     std::atomic<bool> taken;
     std::atomic_flag check;
     void set_data(const Key &key, const Tp &value);
+    const Key& get_key();
 };
 
 template <typename Key, typename Tp> class multimap {
