@@ -2,88 +2,89 @@
 #include <thread>
 #include <iostream>
 #include <algorithm>
+#include "points.h"
+#include "ParallelSorting.h"
 
-int NPROC = 8;
+int NPROC = 2;
 
-void merge(std::vector<double> &elements, const int left, const int mid, const int right) {
+
+void merge(std::vector<Point> &points, const int left, const int mid, const int right, Point &P) {
 	int i = left, j = mid;	
-	std::vector<double> merged_elements(right - left);
+	std::vector<Point> merged_points(right - left);
 	int k = 0;
 
 	while(i < mid || j < right) {
 
 		if(i == mid) {
-			merged_elements[k++] = elements[j];
+			merged_points[k++] = points[j];
 			++j;
 			continue;
 		}
 
 		if(j == right) {
-			merged_elements[k++] = elements[i];
+			merged_points[k++] = points[i];
 			++i;
 			continue;
 		}
 
-		if(elements[i] > elements[j]) {
-			merged_elements[k++] = elements[j];
+		if(compare_angles(points[j], points[i], P)) {
+			merged_points[k++] = points[j];
 			++j;
 			continue;
 		}
 		
-		merged_elements[k++] = elements[i];
+		merged_points[k++] = points[i];
 		++i;
 	}
 
 	for(int i = left; i < right; ++i) {
-		elements[i] = merged_elements[i - left];
+		points[i] = merged_points[i - left];
 	}
 
 }
 
 
-void sample_sort(std::vector<double> &elements, int left, int right, int chunk_sz) {
+void sample_sort(std::vector<Point> &points, int left, int right, int chunk_sz, Point &P) {
 	
 	if(right - left <= chunk_sz) {
-		std::sort(elements.begin() + left, elements.begin() + right);
+		std::sort(points.begin() + left, points.begin() + right, [&P] (Point &p1, Point &p2){ return compare_angles(p1, p2, P); });
 
 		return;
 	}
 
 	int mid = left + (right - left) / 2;
-	std::thread	t_left(&sample_sort, std::ref(elements),left, mid, chunk_sz);
-	std::thread t_right(&sample_sort, std::ref(elements),mid, right, chunk_sz);
+	std::thread	t_left(&sample_sort, std::ref(points), left, mid, chunk_sz, std::ref(P));
+	std::thread t_right(&sample_sort, std::ref(points), mid, right, chunk_sz, std::ref(P));
 
 	t_left.join(), t_right.join();
 
-	merge(elements, left, mid, right);
+	merge(points, left, mid, right, P);
 }
 
 /*
 
-
-
 int main() {
 	int n;
 	std::cin >> n;
-	std::vector<double> elements;
+	std::vector<Point> points;
 
 	for(int i = 0; i < n; ++i) {
-		int a;
-		std::cin >> a;
-		elements.push_back(a);
+		int a, b;
+		std::cin >> a >> b;
+		points.push_back(Point(a, b));
 	}
 
 	int chunk_sz = n / NPROC;
-	sample_sort(elements, 0, n, chunk_sz);
+	chunk_sz = std::max(chunk_sz, 1);
+	Point P = points[0];
+	sample_sort(points, 0, n, chunk_sz, P);
 
 	for(int i = 0; i < n; ++i) {
-		std::cout << elements[i] << " ";
+		std::cout << points[i] << " ";
 	}
 
 	return 0;
 }
-
-
 
 
 */
