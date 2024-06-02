@@ -1,7 +1,7 @@
 #include "points.h"
 #include <cmath>
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 
 std::ostream &operator<<(std::ostream &os, const Point &point) {
     os << point.x << " " << point.y;
@@ -103,5 +103,3 @@ Line generate_line(const Point &p, const Point &q) {
     return Line((q.y - p.y) / (p.x - q.x), 1,
                 (q.y * p.x - p.y * q.x) / (q.x - p.x));
 }
-
-
