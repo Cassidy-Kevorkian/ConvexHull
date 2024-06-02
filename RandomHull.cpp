@@ -38,3 +38,15 @@ size_t random_hull::multimap<Key, Tp>::increment(size_t i) {
     return (i + 1) % __capacity;
 }
 
+template <typename Key, typename Tp>
+ Tp &get_value(const Key &key) {
+    size_t i = get_entry(Key);
+    while(__table[i].taken.load()){
+        if(__table[i].get_key() == key){
+            return __table[i].get_value();
+        }
+        i = increment(i);
+    }
+    return __table[i].get_value();
+}
+
