@@ -70,8 +70,8 @@ double dist(const Point &p, const Line &l) {
 }
 
 double angle(const Point &p, const Point &ref) {
-    if (p.x == ref.x && p.y == ref.y)
-        return 0.0;
+    if (p == ref)
+        return -1e-9;
     return std::atan2(p.y - ref.y, p.x - ref.x);
 }
 
