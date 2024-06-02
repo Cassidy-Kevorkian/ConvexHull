@@ -10,8 +10,8 @@ typedef std::pair<Point, Point> Facet;
 std::vector<Facet> convex_hull(const std::vector<Point> &points);
 
 template <typename Key, typename Tp> class Entry {
-  private:
-    std::pair<Key, Tp> __data;
+  public:
+    std::pair<Key, Tp> data;
     std::atomic<bool> taken;
     std::atomic_flag check;
 };
@@ -20,13 +20,19 @@ template <typename Key, typename Tp>
 class multimap {
   private:
     Key key;
-
     Tp value;
     size_t __capacity;
+    Entry<Key, Tp> *table;
 
   public:
-    multimap() { __capacity = 4000000; }
-    multimap(std::uint64_t __capacity) : __capacity(__capacity) {}
+    multimap() { 
+        __capacity = 4000000; 
+        table = new Entry<Key, Tp>[__capacity];
+    }
+
+    multimap(std::uint64_t __capacity) : __capacity(__capacity) {
+        table = new Entry<Key, Tp>[__capacity];
+    }
 
     bool insert_and_set(const Key &key, const Tp &value);
 
