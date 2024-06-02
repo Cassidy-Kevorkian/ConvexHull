@@ -49,8 +49,8 @@ std::vector<Point> GrahamScan(std::vector<Point> &points) {
     //remove_colinear(points, P);
 
     std::stack<Point> stack;
-    stack.push(P);
     stack.push(points[0]);
+    stack.push(points[1]);
 
     for (size_t i = 1; i < points.size(); ++i) {
         Point point = points[i];

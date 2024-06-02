@@ -8,16 +8,16 @@
 #include <thread>
 
 
-namespace GrahamParallel {
+namespace GrahamScanParallel {
 
 	struct DoublyLinkedPoint {
 		DoublyLinkedPoint(Point point) {
-			P = point;
+			value = point;
 			next = NULL;
 			prev = NULL;
 		}
 
-		Point P;
+		Point value;
 		DoublyLinkedPoints *next;
 		DoublyLinkedPoints *prev;
 	};
@@ -29,7 +29,7 @@ namespace GrahamParallel {
 
 		for (size_t i = 0; i < num_points - 2; ++i) {
 
-			while(pred != begin && !is_convex(pred, curr, curr -> next)) {
+			while(pred != begin && !is_convex(pred -> value, curr -> value, (curr -> next) -> value)) {
 				pred -> next = curr -> next;
 				(curr -> next) -> prev = pred;
 				pred = pred -> prev;
@@ -50,7 +50,7 @@ namespace GrahamParallel {
 		
 		while(pred != end_right) {
 			
-			while(pred != begin && !is_convex(pred, curr, curr -> next)) {
+			while(pred != begin && !is_convex(pred -> value, curr -> value, (curr -> next) -> value)) {
 				pred -> next = curr -> next;
 				(curr -> next) -> prev = pred;
 				pred = pred -> prev;
@@ -114,13 +114,15 @@ namespace GrahamParallel {
 		DoublyLinkedPoint *iter = root;
 
 		for(int i = 1; i < num_points; ++i) {
-			DoublyLinkedPoint helper = new DoublyLinkedPoint(points[i]);
+			DoublyLinkedPoint *helper = new DoublyLinkedPoint(points[i]);
 			iter -> next = helper;
 			helper -> prev = iter;
 			iter = iter -> next;
 		}
 
-		std::vector<*DoublyLinkedPoint> LinkedConvexHull = ConvexHullRec(begin, num_points, chunk_sz);
+		std::vector<*DoublyLinkedPoint> LinkedConvexHull = ConvexHullRec(begin, iter, num_points, chunk_sz);
+
+		iter = LinkedConvexHull[0];
 	}
 
 }
@@ -137,6 +139,8 @@ int main() {
 		std::cin >> a >> b;
 		points.push_back(Point(a, b));
 	}
+
+	GrahamScanParallel::ConvexHull(points, NPROC);
 
 	for(int i = 0; i < n; ++i) {
 		std::cout << points[i] << " ";
