@@ -35,6 +35,11 @@ random_hull::convex_hull(const std::vector<Point> &points) {
          w.join();
      }
 
+     for(int i = 0; i < 3; ++i) {
+        //workers[i] = std::thread(&random_hull::ProcessRidge(const Edge &t1, const Point &r, const Edge &t2));
+
+     }
+
 }
 
 void random_hull::build_C(Edge &t, const std::vector<Point> &points) {
