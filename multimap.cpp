@@ -69,4 +69,3 @@ Tp &random_hull::multimap<Key, Tp>::get_value(const Key &key,
     return __table[i].get_value();
 }
 
-
