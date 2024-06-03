@@ -47,6 +47,7 @@ void Convexify(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end) {
     }
 }
 
+
 void ConvexHullRec(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end,
                    int num_points, const int chunk_sz) {
 
@@ -71,7 +72,7 @@ void ConvexHullRec(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end,
 }
 
 std::vector<Point> ConvexHull(std::vector<Point> &points) {
-	int NPROC = 10;
+	int NPROC = 14;
     Point P = points[0];
     int num_points = points.size();
 

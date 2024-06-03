@@ -9,7 +9,8 @@
 #include <fstream>
 #include <iostream>
 #include <points.h>
-#include <random> #include <string>
+#include <random> 
+#include <string>
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
@@ -126,7 +127,7 @@ void test::generate_tests_helper(
     file1 << n << std::endl;
     std::vector<Point> points;
 
-    int hull_points = n * ratio;
+    int hull_points = (n * ratio, 1000);
     file2 << hull_points << std::endl;
     double radius = 100.0;
     double x_center = 0.0;

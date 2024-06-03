@@ -11,12 +11,12 @@
 
 int main() {
     // Tests
-    test::generate_tests(5000);
+    test::generate_tests(5000000);
     //test::run_tests();
      //test::compare_files("../tests/test_many_QH.txt",
                          //"../tests/correction_many.txt");
 
-    test::check_test("../tests/test_average.txt", "../tests/correction_average.txt", GrahamScanParallel::ConvexHull);
+    test::check_test("../tests/test_few.txt", "../tests/correction_few.txt", QuickHullParallel);
 
     return 0;
 

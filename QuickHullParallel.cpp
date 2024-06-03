@@ -119,7 +119,7 @@ std::vector<Point> QuickHullParallel(std::vector<Point> &points) {
     std::vector<Point> convex_hull;
     convex_hull.push_back(lowest_point);
     convex_hull.push_back(highest_point);
-    int rec_depth = 0;
+    int rec_depth = 4;
     std::thread t1 = std::thread(&QuickHullParallelRec, std::ref(lowest_point),
                                  std::ref(highest_point), std::ref(part_1),
                                  std::ref(convex_hull), rec_depth);
