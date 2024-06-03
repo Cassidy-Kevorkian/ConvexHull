@@ -11,9 +11,10 @@ public:
 
     Point(double v1, double v2) : x(v1), y(v2) {}
 
-    Point operator-(const Point &other);
-    Point operator+(const Point &other);
+    Point operator-(const Point &other) const;
+    Point operator+(const Point &other) const;
     bool operator==(const Point &other) const;
+    bool operator<(const Point &other) const;
     double x, y;
 
 };
@@ -39,6 +40,7 @@ double dot_prod(const Point &p1, const Point &q1, const Point &p2,
 
 double cross_prod(const Point &p1, const Point &q1, const Point &p2,
                   const Point &q2);
+
 double cross_prod(const Point &p1, const Point &q1);
 
 double dist(const Point &p, const Point &q);
