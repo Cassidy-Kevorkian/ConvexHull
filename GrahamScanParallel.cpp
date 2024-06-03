@@ -70,7 +70,8 @@ void ConvexHullRec(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end,
     Convexify(begin, end);
 }
 
-std::vector<Point> ConvexHull(std::vector<Point> &points, int NPROC) {
+std::vector<Point> ConvexHull(std::vector<Point> &points) {
+	int NPROC = 10;
     Point P = points[0];
     int num_points = points.size();
 
@@ -116,7 +117,7 @@ std::vector<Point> ConvexHull(std::vector<Point> &points, int NPROC) {
 }
 
 } // namespace GrahamScanParallel
-
+/*
 int main() {
         int n;
         std::cin >> n;
@@ -138,3 +139,4 @@ NPROC);
 
         return 0;
 }
+*/
