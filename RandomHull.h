@@ -11,4 +11,9 @@ typedef std::pair<Point, Point> Edge;
 
 
 std::vector<Edge> convex_hull(const std::vector<Point> &points);
-} // namespace random_hull
+bool is_visible(const Point &p, const Edge &e);
+void build_C(const Edge &t, std::vector<Point> &points);
+void ProcessRidge(const Edge &t1, const Point &r, const Edge &t2); 
+}
+
+
