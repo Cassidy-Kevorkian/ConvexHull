@@ -14,7 +14,7 @@ std::mutex M_mtx;
 
 std::vector<random_hull::Edge>
 random_hull::convex_hull(const std::vector<Point> &points) {
-    if (points.size() < 3)
+    if (points.size() <= 3)
         return {};
 
     std::vector<Edge> edges = {Edge(points[0], points[1]),
