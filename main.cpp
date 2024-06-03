@@ -1,7 +1,9 @@
 #include <GrahamScan.h>
+#include <GrahamScanParallel.h>
 #include <QuickHull.h>
 #include <QuickHullParallel.h>
 #include <points.h>
+#include <ParallelSorting.h>
 #include <tests/tests.h>
 
 #define TEST 0    // 0 for automated tests, 1 for user input
@@ -9,12 +11,12 @@
 
 int main() {
     // Tests
-    test::generate_tests(50000);
+    test::generate_tests(5000);
     //test::run_tests();
      //test::compare_files("../tests/test_many_QH.txt",
                          //"../tests/correction_many.txt");
 
-    test::check_test("../tests/test_many.txt", "../tests/correction_many.txt", GrahamScan);
+    test::check_test("../tests/test_average.txt", "../tests/correction_average.txt", GrahamScanParallel::ConvexHull);
 
     return 0;
 

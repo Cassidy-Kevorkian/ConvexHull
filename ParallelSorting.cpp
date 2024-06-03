@@ -5,8 +5,6 @@
 #include <thread>
 #include <vector>
 
-int NPROC = 2;
-
 void merge(std::vector<Point> &points, const int left, const int mid,
            const int right, Point &P) {
     int i = left, j = mid;
