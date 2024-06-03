@@ -1,9 +1,8 @@
 #include "ParallelSorting.h"
 #include "points.h"
+#include "GrahamScanParallel.h"
 #include <algorithm>
-#include <cmath>
 #include <iostream>
-#include <stack>
 #include <thread>
 #include <vector>
 
@@ -36,7 +35,7 @@ void Convexify(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end) {
 
         UndirectedLinkedPoint *succ = curr->next;
 
-        while (!is_convex(pred->value, curr->value, succ->value)) {
+        while ((pred != begin) && !is_convex(pred->value, curr->value, succ->value)) {
             pred->next = succ;
             succ->prev = pred;
             curr = pred;
@@ -122,7 +121,7 @@ int main() {
         int n;
         std::cin >> n;
         std::vector<Point> points;
-        int NPROC = 5;
+        int NPROC = 8;
 
         for(int i = 0; i < n; ++i) {
                 double a, b;
