@@ -9,8 +9,7 @@
 #include <fstream>
 #include <iostream>
 #include <points.h>
-#include <random>
-#include <string>
+#include <random> #include <string>
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
@@ -195,12 +194,12 @@ void test::check_test(const std::string &input_test, const std::string &correcti
     std::chrono::duration<double> timer = end - start;
     std::cout << timer.count() << " ";
 
-    std::unordered_set<Point, pointHash> my_result;
+    std::unordered_set<Point> my_result;
     for (const auto &point : result) {
         my_result.emplace(point);
     }
 
-    std::unordered_set<Point, pointHash> correct_result;
+    std::unordered_set<Point> correct_result;
     if (!correct_file.is_open()) {
         std::cerr << "Error opening the second file" << std::endl;
         return;
