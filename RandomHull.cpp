@@ -15,7 +15,7 @@ std::mutex M_mtx;
 
 std::vector<random_hull::Edge>
 random_hull::convex_hull(const std::vector<Point> &points) {
-    if (points.size() < 3)
+    if (points.size() <= 3)
         return {};
     std::vector<Edge> edges = {Edge(points[0], points[1]),
                                Edge(points[1], points[2]),
@@ -31,6 +31,13 @@ random_hull::convex_hull(const std::vector<Point> &points) {
     for (auto &w : workers) {
         w.join();
     }
+    workers[0] = std::thread(&ProcessRidge, edges[0], points[1], edges[1]);
+    workers[1] = std::thread(&ProcessRidge, edges[1], points[2], edges[2]);
+    workers[2] = std::thread(&ProcessRidge, edges[2], points[0], edges[0]);
+    for (auto &w : workers) {
+        w.join();
+    }
+    return std::vector<Edge>(H.begin(), H.end());
 }
 
 void random_hull::build_C(const Edge &t, std::vector<Point> &points) {
