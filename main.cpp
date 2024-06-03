@@ -10,9 +10,12 @@
 int main() {
     // Tests
     test::generate_tests(50000);
-    test::run_tests();
-    test::compare_files("../tests/test_many_QH.txt",
-                        "../tests/correction_many.txt");
+    //test::run_tests();
+     //test::compare_files("../tests/test_many_QH.txt",
+                         //"../tests/correction_many.txt");
+
+    test::check_test("../tests/test_many.txt", "../tests/correction_many.txt", GrahamScan);
+
     return 0;
 
     // // User input

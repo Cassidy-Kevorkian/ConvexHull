@@ -34,12 +34,19 @@ bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
 
-Point Point::operator+(const Point &other) {
+Point Point::operator+(const Point &other) const{
     return Point(x + other.x, y + other.y);
 }
 
-Point Point::operator-(const Point &other) {
+Point Point::operator-(const Point &other) const {
     return Point(x - other.x, y - other.y);
+}
+
+bool Point::operator<(const Point &other) const {
+    if(this->x < other.x) return true;
+    if(this->x > other.x) return false;
+    if(this->y > other.y) return false;
+    return true;
 }
 
 double dot_prod(const Point &p1, const Point &q1, const Point &p2,
@@ -103,3 +110,4 @@ Line generate_line(const Point &p, const Point &q) {
     return Line((q.y - p.y) / (p.x - q.x), 1,
                 (q.y * p.x - p.y * q.x) / (q.x - p.x));
 }
+
