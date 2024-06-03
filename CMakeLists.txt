@@ -18,8 +18,11 @@ add_library(graham_scan STATIC GrahamScan.cpp)
 add_library(end_to_end_testing STATIC tests/tests.cpp)
 add_library(random_hull STATIC RandomHull.cpp)
 add_library(multimap STATIC multimap.cpp)
- #target_link_libraries(multimap PUBLIC Threads::Threads)
- #target_link_libraries(random_hull PUBLIC Threads::Threads)
+add_library(graham_scan_parallel STATIC GrahamScanParallel.cpp)
+
+target_link_libraries(multimap PUBLIC Threads::Threads)
+target_link_libraries(random_hull PUBLIC Threads::Threads)
+target_link_libraries(graham_scan_parallel PUBLIC Threads::Threads)
 
 target_include_directories(quick_hull PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(quick_hull_parallel  PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -30,7 +33,7 @@ target_include_directories(random_hull PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(multimap PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
-target_link_libraries(convex_hull PUBLIC end_to_end_testing quick_hull quick_hull_parallel points graham_scan random_hull multimap Threads::Threads) 
+target_link_libraries(convex_hull PUBLIC end_to_end_testing quick_hull quick_hull_parallel points graham_scan graham_scan_parallel random_hull multimap Threads::Threads) 
 
 
 
