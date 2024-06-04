@@ -11,15 +11,15 @@
 
 int main() {
     // Tests
-    test::generate_tests(5000000);
-    //test::run_tests();
-     //test::compare_files("../tests/test_many_QH.txt",
-                         //"../tests/correction_many.txt");
-
-    test::check_test("../tests/test_few.txt", "../tests/correction_few.txt", QuickHullParallel);
+    //test::generate_tests();    // to be run only once
+   test::run_tests({"average"}, QuickHull);
 
     return 0;
 
+    //test::compare_files("../tests/test_many_QH.txt",
+    //"../tests/correction_many.txt");
+
+    //test::check_test("../tests/test_few.txt", "../tests/correction_few.txt", QuickHullParallel);
     // // User input
     // std::cout << "Please enter the number of points:" << std::endl;
     // size_t num_points;
