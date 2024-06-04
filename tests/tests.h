@@ -10,8 +10,8 @@ void check_test(const std::string &input_test, const std::string &correction,
                 std::vector<Point> F(std::vector<Point> &));
 
 void compare_files(const std::string &file1, const std::string &file2);
-void generate_tests(int n);
-void run_tests();
+void generate_tests();
+void run_tests(std::vector<std::string> types, std::vector<Point> F(std::vector<Point> &));
 void run_file(const std::string &file_name);
 
 } // namespace test

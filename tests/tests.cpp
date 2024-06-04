@@ -14,8 +14,11 @@
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 // main takes two parameters n and the type of test
+
+std::vector<int> values_tested =  {100, 1000, 10000, 100000, 1000000, 10000000, 30000000};
 
 void test::run_file(const std::string &file_name) {
     std::ifstream file(file_name);
@@ -91,12 +94,14 @@ void test::run_file(const std::string &file_name) {
     file3.close();
 }
 
-void test::run_tests() {
-      run_file("../tests/test_few.txt");
-      run_file("../tests/test_average.txt");
-      run_file("../tests/test_many.txt");
+void test::run_tests(std::vector<std::string> types,std::vector<Point> F(std::vector<Point> &)) {
+    for (auto type: types){
+        for (auto n: values_tested){
+            std::cout << "Test " << n << " " << type << "\n";
+            test::check_test("../tests/test_"+ std::to_string(n) + "_" + type + ".txt", "../tests/correction_" + std::to_string(n) + "_" + type + ".txt", F);
 
-    test::check_test("../tests/test_many.txt", "../tests/correction_many.txt", GrahamScan);
+        }
+    }
 }
 
 void test::generate_tests_helper(
@@ -113,8 +118,8 @@ void test::generate_tests_helper(
         return;
     }
 
-    std::ofstream file1("../tests/test_" + type + ".txt");
-    std::ofstream file2("../tests/correction_" + type + ".txt");
+    std::ofstream file1("../tests/test_"+ std::to_string(n)+ "_" + type + ".txt");
+    std::ofstream file2("../tests/correction_" + std::to_string(n) + "_" + type + ".txt");
     if (!file1.is_open()) {
         std::cerr << "Error opening file" << std::endl;
         return;
@@ -127,7 +132,7 @@ void test::generate_tests_helper(
     file1 << n << std::endl;
     std::vector<Point> points;
 
-    int hull_points = (n * ratio, 1000);
+    int hull_points = std::min(int(n * ratio), 1000);
     file2 << hull_points << std::endl;
     double radius = 100.0;
     double x_center = 0.0;
@@ -156,12 +161,14 @@ void test::generate_tests_helper(
     file2.close();
 }
 
-void test::generate_tests(int n) {
+void test::generate_tests() {
     srand(time(0));
+    for (auto n: values_tested){
+        test::generate_tests_helper(n, "few");
+        test::generate_tests_helper(n, "average");
+        test::generate_tests_helper(n, "many");
+    }
 
-    test::generate_tests_helper(n, "few");
-    test::generate_tests_helper(n, "average");
-    test::generate_tests_helper(n, "many");
 }
 
 void test::check_test(const std::string &input_test, const std::string &correction,
@@ -215,11 +222,12 @@ void test::check_test(const std::string &input_test, const std::string &correcti
 
     if (correct_result != my_result) {
         std::cout << "Test failed\n";
+        std::cout << correct_result.size() << " " << my_result.size()<<std::endl;
     } else {
-        std::cout << "Test succeded\n";
+        std::cout << "Test succeeded\n";
     }
+   // std::cout << "Number of points: " << number_tests << " "; 
 
-    std::cout << correct_result.size() << " " << my_result.size();
     correct_file.close();
 }
 
