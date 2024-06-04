@@ -4,17 +4,17 @@
 #include <thread>
 #include <vector>
 
-Point FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
-                                    size_t num_points);
+void FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
+                                    size_t start, size_t end, Point &res);
 
 std::vector<std::vector<Point>>
 GeneratePartitionParallel(const Point &p, const Point &q, std::vector<Point> &points,
                           size_t num_points);
 
-std::vector<Point> GeneratePointsOutsideParallel(const Point &p, const Point &q,
+void GeneratePointsOutsideParallelThread(const Point &p, const Point &q,
                                                  const Point &furthest_point,
                                                  std::vector<Point> &points,
-                                                 size_t num_points);
+                                                 size_t num_points, std::vector<Point> &points_outside);
 
 void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &points,
                           std::vector<Point> &convex_hull, int rec_depth);

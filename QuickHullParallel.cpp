@@ -7,17 +7,17 @@
 
 std::mutex lock;
 
-Point FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
-                                    size_t num_points) {
+void FurthestPointFromLineParallel(const Line &l, std::vector<Point> &points,
+                                    size_t start, size_t end, Point &res) {
     Point furthest_point = points[0];
 
-    for (int i = 1; i < num_points; ++i) {
+    for (int i = start; i < end; ++i) {
 
         if (dist(furthest_point, l) < dist(points[i], l))
             furthest_point = points[i];
     }
 
-    return furthest_point;
+    res = furthest_point;
 }
 
 std::vector<std::vector<Point>>
@@ -42,23 +42,18 @@ GeneratePartitionParallel(const Point &p, const Point &q, std::vector<Point> &po
     return {part_1, part_2};
 }
 
-std::vector<Point> GeneratePointsOutsideParallel(const Point &p, const Point &q,
-                                                 Point &furthest_point,
+
+void GeneratePointsOutsideParallelThread(const Point &p, const Point &q,
+                                                 const Point &furthest_point,
                                                  std::vector<Point> &points,
-                                                 size_t num_points) {
-    std::vector<Point> points_outside;
+                                                 size_t num_points, std::vector<Point> &points_outside) {
+    for (int i = 0; i < points.size(); ++i) {
 
-    for (int i = 0; i < num_points; ++i) {
+        if(furthest_point == points[i]) continue;
 
-        if ((furthest_point.x == points[i].x) &&
-            (furthest_point.y == points[i].y))
-            continue;
-
-        if (angle(p, q, p, furthest_point) <= angle(p, q, p, points[i]))
+        if (cross_prod(q - p, furthest_point - p) * cross_prod(furthest_point - p, points[i] - p) >= 0)
             points_outside.push_back(points[i]);
     }
-
-    return points_outside;
 }
 
 void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &points,
@@ -69,15 +64,34 @@ void QuickHullParallelRec(const Point &p, const Point &q, std::vector<Point> &po
         return;
 
     Line l = generate_line(p, q);
-    Point furthest_point = FurthestPointFromLineParallel(l, points, num_points);
+    size_t start = 0, end = num_points, middle = num_points / 2;
+    Point furthest_left, furthest_right, furthest_point;
+
+    std::thread thr1 = std::thread(&FurthestPointFromLineParallel, std::ref(l),
+                                 std::ref(points), start, middle, std::ref(furthest_left));
+    std::thread thr2 = std::thread(&FurthestPointFromLineParallel, std::ref(l),
+                                 std::ref(points), middle, end, std::ref(furthest_right));
+    thr1.join();
+    thr2.join();
+
+    if (dist(furthest_left, l) > dist(furthest_right, l))
+        furthest_point = furthest_left;
+    else
+        furthest_point = furthest_right;
+   // Point furthest_point = FurthestPointFromLineParallel(l, points, num_points);
     lock.lock();
     convex_hull.push_back(furthest_point);
     lock.unlock();
 
-    std::vector<Point> part_1 =
-        GeneratePointsOutsideParallel(p, q, furthest_point, points, num_points);
-    std::vector<Point> part_2 =
-        GeneratePointsOutsideParallel(q, p, furthest_point, points, num_points);
+    std::vector<Point> part_1, part_2;
+    std::thread th1 = std::thread(&GeneratePointsOutsideParallelThread, std::ref(p),
+                                 std::ref(q), std::ref(furthest_point),
+                                 std::ref(points), num_points, std::ref(part_1));
+    std::thread th2 = std::thread(&GeneratePointsOutsideParallelThread, std::ref(q), std::ref(p),
+                                 std::ref(furthest_point), std::ref(points), num_points, std::ref(part_2));
+    th1.join();
+    th2.join();
+
     
     if(rec_depth > 4) {
         QuickHullParallelRec(p, furthest_point, part_1, convex_hull, rec_depth);
