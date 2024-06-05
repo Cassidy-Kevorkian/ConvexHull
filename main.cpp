@@ -11,8 +11,8 @@
 
 int main() {
     // Tests
-    //test::generate_tests();    // to be run only once
-   test::run_tests({"average"}, QuickHull);
+   // test::generate_tests();    // to be run only once
+   test::run_tests({"average"}, GrahamScanParallel::convex_hull);
 
     return 0;
 

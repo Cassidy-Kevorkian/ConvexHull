@@ -70,6 +70,28 @@ void GrahamScanParallel::convex_hull_rec(GrahamScanParallel::undirected_linked_p
     convexify(begin, end);
 }
 
+void FindMin(std::vector<Point> &points, int nproc, Point &min_point) {
+    int chunk_sz = points.size() / nproc;
+    std::vector<std::thread> threads;
+    int start = 0;
+    for (int i = 0; i < nproc; ++i) {
+        int end = std::min(start + chunk_sz, (int)points.size());
+        std::thread thr(FindMinThread, std::ref(points), start, end, std::ref(min_point));
+        thr.join();
+        start = end;
+    }
+}
+
+void FindMinThread(std::vector<Point> &points, const int start, const int end, Point &min_point){
+    Point P = points[start];
+    for (int i = start; i < end; ++i) {
+        if (points[i].y < P.y || (points[i].y == P.y && points[i].x < P.x)) {
+            P = points[i];
+        }
+    }
+    min_point = P;
+}
+
 std::vector<Point> GrahamScanParallel::convex_hull(std::vector<Point> &points) {
 	int NPROC = 14;
     Point P = points[0];

@@ -8,6 +8,10 @@ struct undirected_linked_point;
 
 void convexify(undirected_linked_point *begin, undirected_linked_point *end);
 
+void FindMin(std::vector<Point> &points, int nproc, Point &min_point);
+
+void FindMinThread(std::vector<Point> &points, const int start, const int end, Point &min_point);
+
 void convex_hull_rec(undirected_linked_point *begin, undirected_linked_point *end, int num_points, const int chunk_sz);
 
 std::vector<Point> convex_hull(std::vector<Point> &points); 
