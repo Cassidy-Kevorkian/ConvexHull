@@ -70,19 +70,26 @@ void GrahamScanParallel::convex_hull_rec(GrahamScanParallel::undirected_linked_p
     convexify(begin, end);
 }
 
-void FindMin(std::vector<Point> &points, int nproc, Point &min_point) {
-    int chunk_sz = points.size() / nproc;
-    std::vector<std::thread> threads;
-    int start = 0;
+void GrahamScanParallel::FindMin(std::vector<Point> &points, int nproc, Point &min_point) {
+    int num_points = points.size();
+    int chunk_sz = num_points / nproc;
+
+    std::vector<std::thread> threads(nproc);
+    std::vector<Point> min_points(nproc);
+
+    int start = 0, end = num_points;
     for (int i = 0; i < nproc; ++i) {
-        int end = std::min(start + chunk_sz, (int)points.size());
-        std::thread thr(FindMinThread, std::ref(points), start, end, std::ref(min_point));
-        thr.join();
-        start = end;
+        int new_end = (i == nproc-1) ? num_points : start + chunk_sz;
+        threads[i] = std::thread(GrahamScanParallel::FindMinThread, std::ref(points), start, end, std::ref(min_points[i]));
+        start = new_end;
     }
+    for(int i = 0; i < nproc; ++i) {
+        threads[i].join();
+    }   
+    GrahamScanParallel::FindMinThread(min_points, 0, nproc, min_point);
 }
 
-void FindMinThread(std::vector<Point> &points, const int start, const int end, Point &min_point){
+void GrahamScanParallel::FindMinThread(std::vector<Point> &points, const int start, const int end, Point &min_point){
     Point P = points[start];
     for (int i = start; i < end; ++i) {
         if (points[i].y < P.y || (points[i].y == P.y && points[i].x < P.x)) {
@@ -93,16 +100,12 @@ void FindMinThread(std::vector<Point> &points, const int start, const int end, P
 }
 
 std::vector<Point> GrahamScanParallel::convex_hull(std::vector<Point> &points) {
-	int NPROC = 14;
-    Point P = points[0];
+	int NPROC = 10;
+   // Point P = points[0];
     int num_points = points.size();
 
-    for (int i = 0; i < num_points; ++i) {
-
-        if (points[i].y < P.y || (points[i].y == P.y && points[i].x < P.x)) {
-            P = points[i];
-        }
-    }
+    Point P;
+    GrahamScanParallel::FindMin(points, NPROC, P);
 
     int chunk_sz = num_points / NPROC;
     chunk_sz = std::max(chunk_sz, 1);
