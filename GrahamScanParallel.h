@@ -4,13 +4,13 @@
 
 namespace GrahamScanParallel {
 
-struct UndirectedLinkedPoint;
+struct undirected_linked_point;
 
-void Convexify(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end);
+void convexify(undirected_linked_point *begin, undirected_linked_point *end);
 
-void ConvexHullRec(UndirectedLinkedPoint *begin, UndirectedLinkedPoint *end, int num_points, const int chunk_sz);
+void convex_hull_rec(undirected_linked_point *begin, undirected_linked_point *end, int num_points, const int chunk_sz);
 
-std::vector<Point> ConvexHull(std::vector<Point> &points); 
+std::vector<Point> convex_hull(std::vector<Point> &points); 
 
 }
 
