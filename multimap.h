@@ -1,4 +1,5 @@
-
+#ifndef MULTIMAP_H
+#define MULTIMAP_H
 #include <atomic>
 #include <points.h>
 
@@ -46,3 +47,4 @@ template <typename Key, typename Tp> class multimap {
     size_t get_entry(const Key &key);
 };
 } // namespace random_hull
+#endif
