@@ -5,7 +5,9 @@
 #include <multimapTesting.h>
 #include <thread>
 namespace random_hull_testing {
+
 void testing_entry_set_data() {
+
     random_hull::Entry<Point, random_hull::Edge> new_entry;
 
     Point point(10, 2);
@@ -33,6 +35,7 @@ void testing_entry_get_value() {
 
     Point point(10, 2);
     random_hull::Edge edge(Point(1, 2), Point(3, 4));
+    new_entry.set_data(point, edge);
 
     if (!(new_entry.get_value() == edge)) {
         printf("testing_entry_get_value failed!\n");
@@ -49,6 +52,8 @@ void testing_entry_get_key() {
 
     Point point(10, 2);
     random_hull::Edge edge(Point(1, 2), Point(3, 4));
+
+    new_entry.set_data(point, edge);
 
     if (!(new_entry.get_key() == point)) {
         printf("testing_entry_get_key failed!\n");
@@ -91,7 +96,7 @@ void testing_multimap_insert_and_set() {
 // }
 
 void testing_multimap_get_value() {
-    printf("\nTesting multimap insert and set...\n");
+    printf("\nTesting multimap get_value...\n");
 
     Point point(10, 2);
 
@@ -119,6 +124,7 @@ void testing_multimap_get_value() {
 }
 
 void testing_suite() {
+
     testing_entry_set_data();
     testing_entry_get_value();
     testing_entry_get_key();

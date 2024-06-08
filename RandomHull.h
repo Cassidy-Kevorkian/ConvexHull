@@ -5,8 +5,10 @@
 #include <points.h>
 #include <set>
 #include <vector>
+#include <multimap.h>
 constexpr size_t max_size = std::numeric_limits<size_t>::max();
 namespace random_hull {
+
 typedef std::pair<Point, Point> Edge;
 std::vector<Edge> convex_hull(const std::vector<Point> &points);
 bool is_visible(const Point &p, const Edge &e);

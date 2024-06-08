@@ -1,12 +1,12 @@
 #ifndef POINTS_H
 #define POINTS_H
 #include <cmath>
-#include <iostream>
 #include <cstdint>
+#include <iostream>
 
 class Point {
-private:
-public:
+  private:
+  public:
     Point() : x(0), y(0) {}
 
     Point(double v1, double v2) : x(v1), y(v2) {}
@@ -16,11 +16,11 @@ public:
     bool operator==(const Point &other) const;
     bool operator<(const Point &other) const;
     double x, y;
-
 };
 
+
 class Line {
-public:
+  public:
     Line() : a(0), b(0), c(0) {}
 
     Line(double v1, double v2, double v3) : a(v1), b(v2), c(v3) {}
@@ -62,14 +62,13 @@ Line generate_line(const Point &p, const Point &q);
 
 namespace std {
 
-    template<>
-    class hash<Point> {
-        public:
-        std::uint64_t operator()(const Point &p) const {
-            return std::hash<double>()(p.x) ^ std::hash<double>()(p.y);
+template <> class hash<Point> {
+  public:
+    std::uint64_t operator()(const Point &p) const {
+        return std::hash<double>()(p.x) ^ std::hash<double>()(p.y);
     }
-    };
+};
 
-}
+} // namespace std
 
 #endif
