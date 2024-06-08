@@ -20,6 +20,8 @@ random_hull::convex_hull(const std::vector<Point> &points) {
     if (points.size() <= 3)
         return {};
 
+    
+
     std::vector<Edge> edges = {Edge(points[0], points[1]),
                                Edge(points[1], points[2]),
                                Edge(points[2], points[0])};

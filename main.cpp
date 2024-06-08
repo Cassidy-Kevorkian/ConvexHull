@@ -1,7 +1,9 @@
 #include <GrahamScan.h>
+#include <GrahamScanParallel.h>
 #include <QuickHull.h>
 #include <QuickHullParallel.h>
 #include <points.h>
+#include <ParallelSorting.h>
 #include <tests/tests.h>
 
 #define TEST 0    // 0 for automated tests, 1 for user input
@@ -15,10 +17,16 @@ int main() {
                          //"../tests/correction_many.txt");
 
 //    test::check_test("../tests/test_many.txt", "../tests/correction_many.txt", GrahamScan);
+   // test::generate_tests();    // to be run only once
+   test::run_tests({"average"}, GrahamScanParallel::convex_hull);
 
     random_hull_testing::testing_suite();
     return 0;
 
+    //test::compare_files("../tests/test_many_QH.txt",
+    //"../tests/correction_many.txt");
+
+    //test::check_test("../tests/test_few.txt", "../tests/correction_few.txt", QuickHullParallel);
     // // User input
     // std::cout << "Please enter the number of points:" << std::endl;
     // size_t num_points;

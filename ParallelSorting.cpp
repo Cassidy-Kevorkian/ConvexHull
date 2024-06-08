@@ -5,9 +5,7 @@
 #include <thread>
 #include <vector>
 
-int NPROC = 2;
-
-void merge(std::vector<Point> &points, const int left, const int mid,
+void ParallelSorting::merge(std::vector<Point> &points, const int left, const int mid,
            const int right, Point &P) {
     int i = left, j = mid;
     std::vector<Point> merged_points(right - left);
@@ -42,7 +40,7 @@ void merge(std::vector<Point> &points, const int left, const int mid,
     }
 }
 
-void sample_sort(std::vector<Point> &points, int left, int right, int chunk_sz,
+void ParallelSorting::sample_sort(std::vector<Point> &points, int left, int right, int chunk_sz,
                  Point &P) {
 
     if (right - left <= chunk_sz) {
