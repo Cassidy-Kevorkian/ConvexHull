@@ -45,7 +45,7 @@ void testing_is_visible() {
 }
 
 void testing_build_c() {
-    std::cout << "\nTESTING: build_c...\n" << std::endl;
+    printf("\nTESTING: build_c...\n");
     std::uniform_real_distribution unif(-20., 20.);
     std::normal_distribution normal_1(0., 0.5);
     std::normal_distribution normal_2(0., 5.);
