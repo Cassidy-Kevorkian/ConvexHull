@@ -12,7 +12,7 @@ namespace random_hull {
 typedef std::pair<Point, Point> Edge;
 std::vector<Edge> convex_hull(const std::vector<Point> &points);
 bool is_visible(const Point &p, const Edge &e);
-void build_c(Edge &t, const std::vector<Point> &points);
+void build_c(Edge &t, const std::vector<Point> &points, std::map<random_hull::Edge, std::vector<int>>& C);
 void process_ridge(const Edge &t1, const Point &r, const Edge &t2,
                    const std::vector<Point> &points);
 

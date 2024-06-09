@@ -50,7 +50,7 @@ random_hull::convex_hull(const std::vector<Point> &points) {
 
     for (int i = 0; i < 3; ++i) {
         workers[i] = std::thread(&random_hull::build_c, std::ref(edges[i]),
-                                 std::cref(points));
+                                 std::cref(points), std::ref(C));
     }
 
     for (auto &w : workers) {
@@ -63,18 +63,22 @@ random_hull::convex_hull(const std::vector<Point> &points) {
     }
 }
 
-void random_hull::build_c(Edge &t, const std::vector<Point> &points) {
+void random_hull::build_c(Edge &t, const std::vector<Point> &points, std::map<random_hull::Edge, std::vector<int>>& C) {
 
     for (size_t i = 0; i < points.size(); ++i) {
 
         if (is_visible(points[i], t)) {
             C[t].push_back(i);
         }
+
     }
+
 }
 
 bool random_hull::is_visible(const Point &p, const Edge &e) {
+
     return cross_prod(e.first - p, e.second - p) > 0;
+
 }
 
 random_hull::Edge random_hull::join(const Point &p, const Point &r,
