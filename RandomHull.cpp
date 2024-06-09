@@ -161,6 +161,7 @@ void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
     std::vector<int> merged_sets;
 
     for (size_t i = 0; i < merged_sets_temp.size(); ++i) {
+
         const Point &tmp_point = points[merged_sets_temp[i]];
 
         if (random_hull::is_visible(tmp_point, t)) {

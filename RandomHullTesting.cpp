@@ -112,22 +112,59 @@ void testing_join() {
     printf("Test one succeded\n");
 }
 
+struct PointComparator {
+    bool operator()(const random_hull::Edge& lhs, const random_hull::Edge& rhs) const {
+        if (lhs.first < rhs.first) return true;
+        if ((rhs.first < lhs.first)) return false;
+        return lhs.second < rhs.second;
+    }
+};
+
 void testing_merge_sets() {
 
     printf("\nTESTING: merge_sets...\n");
 
     std::uniform_real_distribution unif(0., 1.);
     Point A(0, 0), B(1, 1), C(2, 0);
+    random_hull::Edge AB(A, B), BC(B,C);
 
     std::vector<Point> points;
-    std::vector<Point> set_AB, set_BC;
+    std::vector<int> set_AB, set_BC;
+
+    double thetaAB = cross_prod(Point(0, 1), B - A);
+    double thetaBC = cross_prod(Point(0, 1), C - B);
+    
+    std::map<random_hull::Edge, std::vector<int>> C_test;
+
+
+    double ab_norm = (A - B).norm(), bc_norm = (B - C).norm();
     for (int i = 0; i < 10000; ++i) {
         if (unif(generator) < 0.5) {
             double u1 = unif(generator), u2 = unif(generator);
-            double z0 = std::sqrt(-2 * std::log(u1)) * std::cos(M_PI * u2);
-            double z1 = std::sqrt(-2 * std::log(u1)) * std::sin(M_PI * u2);
+
+            double z0 = ab_norm / 2 * u1 * std::cos(M_PI * u2 + thetaAB);
+            double z1 = ab_norm / 2 * u1 * std::sin(M_PI * u2 + thetaAB);
+
+            points.push_back(Point(z0, z1) + (A + B) / 2.);
+            set_AB.push_back(i);
+        } else {
+            double u1 = unif(generator), u2 = unif(generator);
+
+            double z0 = bc_norm / 2 * u1 * std::cos(M_PI * u2 + thetaBC);
+            double z1 = bc_norm / 2 * u1 * std::sin(M_PI * u2 + thetaBC);
+
+            points.push_back(Point(z0, z1) + (B + C) / 2);
+            set_BC.push_back(i);
         }
     }
+
+    Point P(0.8,1.8);
+    random_hull::Edge PB(P,B);
+
+    random_hull::merge_sets(C_test, AB, BC, PB, points);
+
+
+    assert(C_test[PB] == set_BC);
 }
 
 void testing_get_min() { std::cout << "TESTING: get_min" << std::endl; }

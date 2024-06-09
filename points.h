@@ -12,10 +12,14 @@ class Point {
     Point(double v1, double v2) : x(v1), y(v2) {}
 
     Point operator-(const Point &other) const;
+    Point operator/(double other) const;
+    Point operator*(double other) const;
     Point operator+(const Point &other) const;
     bool operator==(const Point &other) const;
     bool operator<(const Point &other) const;
     double x, y;
+
+    double norm();
 };
 
 

@@ -34,7 +34,7 @@ bool Point::operator==(const Point &other) const {
     return x == other.x && y == other.y;
 }
 
-Point Point::operator+(const Point &other) const{
+Point Point::operator+(const Point &other) const {
     return Point(x + other.x, y + other.y);
 }
 
@@ -43,9 +43,12 @@ Point Point::operator-(const Point &other) const {
 }
 
 bool Point::operator<(const Point &other) const {
-    if(this->x < other.x) return true;
-    if(this->x > other.x) return false;
-    if(this->y > other.y) return false;
+    if (this->x < other.x)
+        return true;
+    if (this->x > other.x)
+        return false;
+    if (this->y >= other.y)
+        return false;
     return true;
 }
 
@@ -109,5 +112,15 @@ Line generate_line(const Point &p, const Point &q) {
 
     return Line((q.y - p.y) / (p.x - q.x), 1,
                 (q.y * p.x - p.y * q.x) / (q.x - p.x));
+}
+
+double Point::norm() { return std::sqrt(x * x + y * y); }
+
+Point Point::operator/(double other) const {
+    return Point(this->x / other, this->y / other);
+}
+
+Point Point::operator*(double other) const {
+    return Point(this->x * other, this->y * other);
 }
 
