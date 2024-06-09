@@ -15,6 +15,6 @@ void testing_merge_sets();
 
 
 void testing_join();
-void testing_get_min();
+//void testing_get_min();
 void testing_process_other_ridge();
 } // namespace random_hull_testing
