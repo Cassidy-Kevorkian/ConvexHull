@@ -58,7 +58,7 @@ void testing_build_c() {
 
     std::vector<std::vector<int>> visible_correction(3);
 
-    for (int i = 0; i < 1000; ++i) {
+    for (int i = 0; i < 10000; ++i) {
         points[0].push_back(Point(unif(generator), normal_1(generator)));
         points[1].push_back(Point(unif(generator), normal_2(generator)));
         points[2].push_back(Point(unif(generator), unif(generator)));
@@ -74,6 +74,7 @@ void testing_build_c() {
         if (points[2][i].y > points[2][i].x) {
             visible_correction[2].push_back(i);
         }
+
     }
 
     for (int i = 0; i < 3; ++i) {
@@ -88,8 +89,9 @@ void testing_build_c() {
 
         D[edges[i]] = {};
 
-        std::cout << "Test " << i+1 << " SUCCESSFUL" << std::endl;
+        std::cout << "Test " << i + 1 << " SUCCESSFUL" << std::endl;
     }
+
 }
 
 
