@@ -18,6 +18,7 @@ int main() {
     //random_hull_testing::testing_suite();
     random_hull_testing::testing_is_visible();
     random_hull_testing::testing_join();
+    //random_hull_testing::testing_build_c();
     
     return 0;
 }

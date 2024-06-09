@@ -3,8 +3,10 @@
 #include "algorithm"
 #include "points.h"
 #include <cassert>
+#include <cmath>
 #include <iostream>
 #include <random>
+#include <vector>
 
 static std::default_random_engine generator(100);
 
@@ -41,55 +43,55 @@ void testing_is_visible() {
 }
 
 void testing_build_c() {
-     //std::cout << "TESTING: build_c" << std::endl;
- //
-     //std::map<random_hull::Edge, std::vector<int>> C;
- //
-     //std::uniform_real_distribution unif(0., 20.);
- //
-     //std::normal_distribution normal_1(0., 0.5);
-     //std::normal_distribution normal_2(0., 5.);
- //
-     //std::vector<random_hull::Edge> edges = {{Point(0, 0), Point(1, 0)},
-                                             //{Point(1, 0), Point(0, 0)},
-                                             //{Point(0, 0), Point(1, 1)}};
- //
-     //std::vector<std::vector<Point>> points_lists;
- //
-     //std::vector<std::vector<int>> visible_correction;
- //
-     //for (int i = 0; i < 1000; ++i) {
-         //points[0].push_back(Point(unif(generator), normal_1(generator)));
-         //points[1].push_back(Point(unif(generator), normal_2(generator)));
-         //points[2].push_back(Point(unif(generator), unif(generator)));
- //
-         //if (points[O][-1].y > 0) {
-             //visible_correction[0].push_back(i);
-         //}
- //
-         //if (points[1][-1].y < 0) {
-             //visible_correction[1].push_back(i);
-         //}
- //
-         //if (points[2][-1].y > points[2][-1].x) {
-             //visible_correction[2].push_back(i);
-         //}
-     //}
- //
-     //for (int i = 0; i < 3; ++i) {
-         //build_c(points[i], edges[i], C);
-         //sort(C[edges[i]].begin(), C[edges[i]].end());
- //
-         //assert(C[edges[i]].size() == visible_correction[i].size());
- //
-         //for (int j = 0; j < C[edges[i]].size(); ++j) {
-             //assert(C[edges[i]][j] == visible_correction[i][j]);
-         //}
- //
-         //C[edges[i]] = {};
- //
-         //std::cout << "Test " << i << " SUCCESSFUL" << std::endl;
-     //}
+    std::cout << "TESTING: build_c" << std::endl;
+
+    std::map<random_hull::Edge, std::vector<int>> C;
+
+    std::uniform_real_distribution unif(0., 20.);
+
+    std::normal_distribution normal_1(0., 0.5);
+    std::normal_distribution normal_2(0., 5.);
+
+    std::vector<random_hull::Edge> edges = {{Point(0, 0), Point(1, 0)},
+                                            {Point(1, 0), Point(0, 0)},
+                                            {Point(0, 0), Point(1, 1)}};
+
+    std::vector<std::vector<Point>> points;
+
+    std::vector<std::vector<int>> visible_correction;
+
+    for (int i = 0; i < 1000; ++i) {
+        points[0].push_back(Point(unif(generator), normal_1(generator)));
+        points[1].push_back(Point(unif(generator), normal_2(generator)));
+        points[2].push_back(Point(unif(generator), unif(generator)));
+
+        if (points[0][-1].y > 0) {
+            visible_correction[0].push_back(i);
+        }
+
+        if (points[1][-1].y < 0) {
+            visible_correction[1].push_back(i);
+        }
+
+        if (points[2][-1].y > points[2][-1].x) {
+            visible_correction[2].push_back(i);
+        }
+    }
+
+    for (int i = 0; i < 3; ++i) {
+        random_hull::build_c(edges[i], points[i], C);
+        sort(C[edges[i]].begin(), C[edges[i]].end());
+
+        assert(C[edges[i]].size() == visible_correction[i].size());
+
+        for (int j = 0; j < C[edges[i]].size(); ++j) {
+            assert(C[edges[i]][j] == visible_correction[i][j]);
+        }
+
+        C[edges[i]] = {};
+
+        std::cout << "Test " << i << " SUCCESSFUL" << std::endl;
+    }
 }
 
 void testing_process_ridge() {
@@ -110,14 +112,22 @@ void testing_join() {
     printf("Test one succeded\n");
 }
 
-void testing_merge_sets() { 
+void testing_merge_sets() {
 
     printf("\nTESTING: merge_sets...\n");
-    
-    Point A(0,0), B(1,1), C(2,0);
-     
-    
 
+    std::uniform_real_distribution unif(0., 1.);
+    Point A(0, 0), B(1, 1), C(2, 0);
+
+    std::vector<Point> points;
+    std::vector<Point> set_AB, set_BC;
+    for (int i = 0; i < 10000; ++i) {
+        if (unif(generator) < 0.5) {
+            double u1 = unif(generator), u2 = unif(generator);
+            double z0 = std::sqrt(-2 * std::log(u1)) * std::cos(M_PI * u2);
+            double z1 = std::sqrt(-2 * std::log(u1)) * std::sin(M_PI * u2);
+        }
+    }
 }
 
 void testing_get_min() { std::cout << "TESTING: get_min" << std::endl; }
