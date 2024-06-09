@@ -1,26 +1,31 @@
 #include <GrahamScan.h>
 #include <GrahamScanParallel.h>
+#include <ParallelSorting.h>
 #include <QuickHull.h>
 #include <QuickHullParallel.h>
-#include <cassert>
-#include <points.h>
-#include <ParallelSorting.h>
-#include <tests/tests.h>
-#include <multimapTesting.h>
-#include <multimap.h>
+#include <RandomHull.h>
 #include <RandomHullTesting.h>
+#include <cassert>
+#include <multimap.h>
+#include <multimapTesting.h>
+#include <points.h>
+#include <tests/tests.h>
 
 #define TEST 0    // 0 for automated tests, 1 for user input
 #define CORRECT 0 // 1 for correctness check
 
 int main() {
 
-    //random_hull_testing::testing_suite();
-    random_hull_testing::testing_is_visible();
-    random_hull_testing::testing_join();
-    random_hull_testing::testing_merge_sets();
-    //random_hull_testing::testing_build_c();
+    // random_hull_testing::testing_suite();
+    // random_hull_testing::testing_is_visible();
+    // random_hull_testing::testing_join();
+    // random_hull_testing::testing_merge_sets();
+    // random_hull_testing::testing_build_c();
     
+    test::generate_tests();
+
+    //test::check_test("../tests/test_1000_average.txt", "../tests/test_1000_average.txt", random_hull::convex_hull);
+
     return 0;
 }
 
@@ -40,7 +45,8 @@ EXPECTED OUTPUT:
 2)
 INPUT:
 16
-7 7 7 -7 -7 -7 -7 7 9 0 -9 0 0 9 0 -9 0 0 1 2 -2 1 -1 -1 3 4 4 3 -5 4 6 5
+7 7 7 -7 -7 -7 -7 7 9 0 -9 0 0 9 0 -9 0 0 1 2 -2 1 -1 -1 3 4 4 3 -5 4
+6 5
 
 EXPECTED OUTPUT:
 (0, -9) (7, -7) (9, 0) (7, 7) (0, 9) (-7, 7) (-9, 0) (-7, -7)
@@ -49,11 +55,11 @@ EXPECTED OUTPUT:
 3)
 INPUT:
 72
-0 0 1 2 -2 1 -1 -1 3 4 4 3 -5 4 6 5 7 7 7 -7 -7 -7 -7 7 9 0 -9 0 0 9 0 -9 -8 0 8
-0 -7 0 7 0 -6 0 6 0 -5 0 5 0 -4 0 4 0 -3 0 3 0 -2 0 2 0 -1 0 1 0 0 -8 0 8 0 -7 0
-7 0 -6 0 6 0 -5 0 5 0 -4 0 4 0 -3 0 3 0 -2 0 2 0 -1 0 1 1 1 2 2 3 3 4 4 5 5 6 6
-1 -1 2 -2 3 -3 4 -4 5 -5 6 -6 -1 1 -2 2 -3 3 -4 4 -5 5 -6 6 -1 -1 -2 -2 -3 -3 -4
--4 -5 -5 -6 -6
+0 0 1 2 -2 1 -1 -1 3 4 4 3 -5 4 6 5 7 7 7 -7 -7 -7 -7 7 9 0 -9 0 0 9 0
+-9 -8 0 8 0 -7 0 7 0 -6 0 6 0 -5 0 5 0 -4 0 4 0 -3 0 3 0 -2 0 2 0 -1 0
+1 0 0 -8 0 8 0 -7 0 7 0 -6 0 6 0 -5 0 5 0 -4 0 4 0 -3 0 3 0 -2 0 2 0
+-1 0 1 1 1 2 2 3 3 4 4 5 5 6 6 1 -1 2 -2 3 -3 4 -4 5 -5 6 -6 -1 1 -2 2
+-3 3 -4 4 -5 5 -6 6 -1 -1 -2 -2 -3 -3 -4 -4 -5 -5 -6 -6
 
 EXPECTED OUTPUT:
 (0, -9) (7, -7) (9, 0) (7, 7) (0, 9) (-7, 7) (-9, 0) (-7, -7)

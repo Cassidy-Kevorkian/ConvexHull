@@ -173,26 +173,11 @@ void testing_merge_sets() {
 
     random_hull::merge_sets(C_test, AB, BC, PB, points);
 
-    // for(const auto &pt : set_BC) {
-    // std::cout << pt << " ";
-    //}
-    // std::cout << "\n";
-    //
-    //
-    // for(const auto &pt : C_test[PB]) {
-    // std::cout << pt << " ";
-    //}
-
-    // std::cout << "\n";
-
-    // std::cout << points[87] << " \n";
 
     assert(C_test[PB] == set_BC);
     printf("  Test 1 passed\n");
 }
 
-// void testing_get_min() { std::cout << "TESTING: get_min" <<
-// std::endl; }
 
 void testing_process_other_ridge() {
     std::cout << "TESTING: other_ridge" << std::endl;
