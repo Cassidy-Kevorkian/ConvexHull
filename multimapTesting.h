@@ -11,7 +11,7 @@ void testing_multimap_insert_and_set();
 void testing_multimap_get_value();
 void testing_increment();
 void testing_get_entry();
-void testing_suite();
+void testing_suite_multimap();
 
 } // namespace random_hull
 #endif

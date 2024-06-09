@@ -20,8 +20,6 @@ random_hull::convex_hull(const std::vector<Point> &points) {
     if (points.size() <= 3)
         return {};
 
-    
-
     std::vector<Edge> edges = {Edge(points[0], points[1]),
                                Edge(points[1], points[2]),
                                Edge(points[2], points[0])};
@@ -60,7 +58,8 @@ random_hull::convex_hull(const std::vector<Point> &points) {
     }
 
     for (int i = 0; i < 3; ++i) {
-         //workers[i] = std::thread(&random_hull::process_ridge(Edge &t1, Point &r, Edge &t2));
+        // workers[i] = std::thread(&random_hull::process_ridge(Edge &t1, Point
+        // &r, Edge &t2));
     }
 }
 
@@ -96,7 +95,7 @@ random_hull::Edge random_hull::join(const Point &p, const Point &r,
 }
 
 void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
-                               const std::vector<Point> &points) {
+                                const std::vector<Point> &points) {
     if (get_min(C[t1]) == max_size && get_min(C[t2]) == max_size)
         return;
 
@@ -110,6 +109,46 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     Point p = points[index];
 
     Edge t = join(r, p, t1);
+    merge_sets(C, t1, t2, t, points);
+
+    H.erase(t1);
+    H.insert(t);
+
+    Point r1 = t.first, r2 = t.second;
+
+    if (r2 == r)
+        std::swap(r1, r2);
+
+    std::thread worker1, worker2;
+    worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r),
+                          std::cref(t2), std::cref(points));
+    worker2 = std::thread(&process_other_ridge, std::cref(r1), std::cref(t),
+                          std::cref(points));
+    worker1.join();
+    worker2.join();
+}
+
+void random_hull::process_other_ridge(const Point &r1, const Edge &t,
+                                      const std::vector<Point> &points) {
+    if (!M.insert_and_set(r1, t)) {
+        const Edge &t1 = M.get_value(r1, t);
+        process_ridge(t, r1, t1, points);
+    }
+}
+
+size_t random_hull::get_min(const std::vector<int> &points_set) {
+    if (points_set.size() == 0) {
+        return max_size;
+    }
+
+    return points_set[0];
+}
+
+void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
+                             const random_hull::Edge &t1,
+                             const random_hull::Edge &t2,
+                             const random_hull::Edge &t,
+                             const std::vector<Point> &points) {
 
     std::vector<int> merged_sets_temp;
     std::merge(C[t1].begin(), C[t1].end(), C[t2].begin(), C[t2].end(),
@@ -125,32 +164,5 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
         }
     }
 
-    H.erase(t1);
-    H.insert(t);
-
-    Point r1 = t.first, r2 = t.second;
-
-    if (r2 == r)
-        std::swap(r1, r2);
-
-    std::thread worker1, worker2;
-    worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r),
-                          std::cref(t2), std::cref(points));
-    worker2 = std::thread(&process_other_ridge, std::cref(r1), std::cref(t), std::cref(points));
-}
-
-void random_hull::process_other_ridge(const Point &r1, const Edge &t,
-                                    const std::vector<Point> &points) {
-    if (!M.insert_and_set(r1, t)) {
-        const Edge &t1 = M.get_value(r1, t);
-        process_ridge(t, r1, t1, points);
-    }
-}
-
-size_t random_hull::get_min(const std::vector<int> &points_set) {
-    if (points_set.size() == 0) {
-        return max_size;
-    }
-
-    return points_set[0];
+    C[t] = std::move(merged_sets);
 }

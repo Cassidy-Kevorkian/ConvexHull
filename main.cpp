@@ -8,13 +8,16 @@
 #include <tests/tests.h>
 #include <multimapTesting.h>
 #include <multimap.h>
+#include <RandomHullTesting.h>
 
 #define TEST 0    // 0 for automated tests, 1 for user input
 #define CORRECT 0 // 1 for correctness check
 
 int main() {
 
-    random_hull_testing::testing_suite();
+    //random_hull_testing::testing_suite();
+    random_hull_testing::testing_is_visible();
+    random_hull_testing::testing_join();
     
     return 0;
 }

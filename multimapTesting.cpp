@@ -123,7 +123,7 @@ void testing_multimap_get_value() {
     // We have not implemented this in our code
 }
 
-void testing_suite() {
+void testing_suite_multimap() {
 
     testing_entry_set_data();
     testing_entry_get_value();
