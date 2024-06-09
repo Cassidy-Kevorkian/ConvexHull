@@ -154,8 +154,10 @@ void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
                              const random_hull::Edge &t,
                              const std::vector<Point> &points) {
 
-    std::vector<int> merged_sets_temp;
-    std::merge(C[t1].begin(), C[t1].end(), C[t2].begin(), C[t2].end(),
+    const auto &set1 = C[t1];
+    const auto &set2 = C[t2];
+    std::vector<int> merged_sets_temp(set1.size() + set2.size());
+    std::merge(set1.begin(), set1.end(), set2.begin(), set2.end(),
                merged_sets_temp.begin());
 
     std::vector<int> merged_sets;
@@ -169,5 +171,6 @@ void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
         }
     }
 
-    C[t] = std::move(merged_sets);
+    C[t] = merged_sets;
+
 }

@@ -130,8 +130,8 @@ void testing_merge_sets() {
     std::vector<Point> points;
     std::vector<int> set_AB, set_BC;
 
-    double thetaAB = cross_prod(Point(0, 1), B - A);
-    double thetaBC = cross_prod(Point(0, 1), C - B);
+    double thetaAB = cross_prod(Point(1, 0), B - A) / (B - A).norm();
+    double thetaBC = cross_prod(Point(1, 0), C - B) / (C - B).norm();
     
     std::map<random_hull::Edge, std::vector<int>> C_test;
 
@@ -141,16 +141,16 @@ void testing_merge_sets() {
         if (unif(generator) < 0.5) {
             double u1 = unif(generator), u2 = unif(generator);
 
-            double z0 = ab_norm / 2 * u1 * std::cos(M_PI * u2 + thetaAB);
-            double z1 = ab_norm / 2 * u1 * std::sin(M_PI * u2 + thetaAB);
+            double z0 = ab_norm / 2.05 * u1 * std::cos(M_PI * u2 + thetaAB);
+            double z1 = ab_norm / 2.05 * u1 * std::sin(M_PI * u2 + thetaAB);
 
             points.push_back(Point(z0, z1) + (A + B) / 2.);
             set_AB.push_back(i);
         } else {
             double u1 = unif(generator), u2 = unif(generator);
 
-            double z0 = bc_norm / 2 * u1 * std::cos(M_PI * u2 + thetaBC);
-            double z1 = bc_norm / 2 * u1 * std::sin(M_PI * u2 + thetaBC);
+            double z0 = bc_norm / 2.05 * u1 * std::cos(M_PI * u2 + thetaBC);
+            double z1 = bc_norm / 2.05 * u1 * std::sin(M_PI * u2 + thetaBC);
 
             points.push_back(Point(z0, z1) + (B + C) / 2);
             set_BC.push_back(i);
@@ -160,10 +160,28 @@ void testing_merge_sets() {
     Point P(0.8,1.8);
     random_hull::Edge PB(P,B);
 
+    C_test[AB] = set_AB;
+    C_test[BC] = set_BC;
+
     random_hull::merge_sets(C_test, AB, BC, PB, points);
+
+     //for(const auto &pt : set_BC) {
+         //std::cout << pt << " ";
+     //}
+     //std::cout << "\n";
+ //
+ //
+     //for(const auto &pt : C_test[PB]) {
+         //std::cout << pt << " ";
+     //}
+
+    //std::cout << "\n";
+
+    //std::cout << points[87] << " \n";
 
 
     assert(C_test[PB] == set_BC);
+    printf("Test one succeded\n");
 }
 
 void testing_get_min() { std::cout << "TESTING: get_min" << std::endl; }
