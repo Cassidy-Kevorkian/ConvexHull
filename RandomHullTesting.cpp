@@ -13,7 +13,7 @@ static std::default_random_engine generator(1);
 namespace random_hull_testing {
 
 void testing_convex_hull() {
-    std::cout << "TESTING: convex_hull" << std::endl;
+    std::cout << "\nTESTING: convex_hull...\n" << std::endl;
 }
 
 void testing_is_visible() {
@@ -23,29 +23,29 @@ void testing_is_visible() {
     random_hull::Edge ab(a, b), bc(b, c), ca(c, a);
     random_hull::Edge ba(b, a), cb(c, b), ac(a, c);
 
-    printf("\nTesting is_visible...\n");
+    printf("\nTESTING: is_visible...\n");
 
     assert(random_hull::is_visible(d, ba) == false);
-    printf("Test one passed\n");
+    printf("  Test 1 passed\n");
 
     assert(random_hull::is_visible(d, ab) == true);
-    printf("Test two passed\n");
+    printf("  Test 2 passed\n");
 
     assert(random_hull::is_visible(d, cb) == false);
-    printf("Test three passed\n");
+    printf("  Test 3 passed\n");
 
     assert(random_hull::is_visible(d, bc) == true);
-    printf("Test four passed\n");
+    printf("  Test 4 passed\n");
 
     assert(random_hull::is_visible(f, ac) == true);
-    printf("Test five passed\n");
+    printf("  Test 5 passed\n");
 
     assert(random_hull::is_visible(f, ca) == false);
-    printf("Test six passed\n");
+    printf("  Test 6 passed\n");
 }
 
 void testing_build_c() {
-    std::cout << "\n Testing build_c...\n" << std::endl;
+    std::cout << "\nTESTING: build_c...\n" << std::endl;
     std::uniform_real_distribution unif(-20., 20.);
     std::normal_distribution normal_1(0., 0.5);
     std::normal_distribution normal_2(0., 5.);
@@ -91,12 +91,12 @@ void testing_build_c() {
 
         D[edges[i]] = {};
 
-        std::cout << "Test " << i + 1 << " SUCCESSFUL" << std::endl;
+        std::cout << "  Test " << i + 1 << " passed" << std::endl;
     }
 }
 
 void testing_process_ridge() {
-    std::cout << "TESTING: process_ridge" << std::endl;
+    std::cout << "\nTESTING: process_ridge...\n" << std::endl;
 }
 
 void testing_join() {
@@ -110,7 +110,7 @@ void testing_join() {
 
     assert(random_hull::is_visible(a, new_edge) == false);
 
-    printf("Test one succeded\n");
+    printf("  Test 1 passed\n");
 }
 
 struct PointComparator {
@@ -188,7 +188,7 @@ void testing_merge_sets() {
     // std::cout << points[87] << " \n";
 
     assert(C_test[PB] == set_BC);
-    printf("Test one succeded\n");
+    printf("  Test 1 passed\n");
 }
 
 // void testing_get_min() { std::cout << "TESTING: get_min" <<
