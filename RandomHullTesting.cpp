@@ -78,7 +78,7 @@ void testing_build_c() {
 
     for (int i = 0; i < 3; ++i) {
         random_hull::build_c(edges[i], points[i], D);
-        //sort(D[edges[i]].begin(), D[edges[i]].end());
+        sort(D[edges[i]].begin(), D[edges[i]].end());
 
         assert(D[edges[i]].size() == visible_correction[i].size());
 
