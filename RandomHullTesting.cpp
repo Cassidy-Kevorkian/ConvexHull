@@ -8,7 +8,7 @@
 #include <random>
 #include <vector>
 
-static std::default_random_engine generator(100);
+static std::default_random_engine generator(1);
 
 namespace random_hull_testing {
 
@@ -43,56 +43,55 @@ void testing_is_visible() {
 }
 
 void testing_build_c() {
-    std::cout << "TESTING: build_c" << std::endl;
+    std::cout << "\n Testing build_c...\n" << std::endl;
+	std::uniform_real_distribution unif(-20., 20.);
+	std::normal_distribution normal_1(0., 0.5);
+	std::normal_distribution normal_2(0., 5.);
 
-    std::map<random_hull::Edge, std::vector<int>> C;
+    std::map<random_hull::Edge, std::vector<int>> D;
 
-    std::uniform_real_distribution unif(0., 20.);
-
-    std::normal_distribution normal_1(0., 0.5);
-    std::normal_distribution normal_2(0., 5.);
-
-    std::vector<random_hull::Edge> edges = {{Point(0, 0), Point(1, 0)},
+	std::vector<random_hull::Edge> edges = {{Point(0, 0), Point(1, 0)},
                                             {Point(1, 0), Point(0, 0)},
                                             {Point(0, 0), Point(1, 1)}};
 
-    std::vector<std::vector<Point>> points;
+    std::vector<std::vector<Point>> points(3);
 
-    std::vector<std::vector<int>> visible_correction;
+    std::vector<std::vector<int>> visible_correction(3);
 
     for (int i = 0; i < 1000; ++i) {
         points[0].push_back(Point(unif(generator), normal_1(generator)));
         points[1].push_back(Point(unif(generator), normal_2(generator)));
         points[2].push_back(Point(unif(generator), unif(generator)));
 
-        if (points[0][-1].y > 0) {
+        if (points[0][i].y > 0) {
             visible_correction[0].push_back(i);
         }
 
-        if (points[1][-1].y < 0) {
+        if (points[1][i].y < 0) {
             visible_correction[1].push_back(i);
         }
 
-        if (points[2][-1].y > points[2][-1].x) {
+        if (points[2][i].y > points[2][i].x) {
             visible_correction[2].push_back(i);
         }
     }
 
     for (int i = 0; i < 3; ++i) {
-        random_hull::build_c(edges[i], points[i], C);
-        sort(C[edges[i]].begin(), C[edges[i]].end());
+        random_hull::build_c(edges[i], points[i], D);
+        //sort(D[edges[i]].begin(), D[edges[i]].end());
 
-        assert(C[edges[i]].size() == visible_correction[i].size());
+        assert(D[edges[i]].size() == visible_correction[i].size());
 
-        for (int j = 0; j < C[edges[i]].size(); ++j) {
-            assert(C[edges[i]][j] == visible_correction[i][j]);
+        for (int j = 0; j < D[edges[i]].size(); ++j) {
+            assert(D[edges[i]][j] == visible_correction[i][j]);
         }
 
-        C[edges[i]] = {};
+        D[edges[i]] = {};
 
-        std::cout << "Test " << i << " SUCCESSFUL" << std::endl;
+        std::cout << "Test " << i+1 << " SUCCESSFUL" << std::endl;
     }
 }
+
 
 void testing_process_ridge() {
     std::cout << "TESTING: process_ridge" << std::endl;
