@@ -119,7 +119,7 @@ std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
 std::vector<Point>
 random_hull::convex_hull(std::vector<Point> &points) {
 
-    const auto &H = random_hull ::__convex_hull__sequential(points);
+    const auto &H = random_hull ::__convex_hull(points);
 
 
     std::unordered_set<Point> hash_set;
