@@ -6,6 +6,7 @@
 #include <points.h>
 #include <set>
 #include <vector>
+#define NUM_THREADS 16
 constexpr size_t max_size = std::numeric_limits<size_t>::max();
 namespace random_hull {
 

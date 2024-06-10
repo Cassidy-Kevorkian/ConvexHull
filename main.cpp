@@ -28,9 +28,9 @@ int main() {
 
     // test::generate_tests();
 
-    test::check_test("../tests/test_100000_average.txt",
-                     "../tests/correction_100000_average.txt",
-                     random_hull::convex_hull_parallel);
+    test::check_test("../tests/test_10000000_average.txt",
+                     "../tests/correction_10000000_average.txt",
+                     random_hull::convex_hull);
 
     // test::check_test("../tests/test_muie_2.txt",
     //"../tests/correction_muie_2.txt",

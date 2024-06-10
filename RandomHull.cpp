@@ -8,6 +8,7 @@
 #include <utility>
 #include <vector>
 
+std::atomic<int> cur_threads;
 std::map<random_hull::Edge, std::vector<int>> C;
 std::mutex C_mtx;
 
@@ -17,7 +18,6 @@ std::mutex H_mtx;
 random_hull::multimap<Point, random_hull::Edge> M;
 
 std::set<random_hull::Edge>
-
 random_hull::__convex_hull(const std::vector<Point> &points) {
     if (points.size() <= 3)
         return {};
@@ -57,6 +57,8 @@ random_hull::__convex_hull(const std::vector<Point> &points) {
         w.join();
     }
 
+    cur_threads.fetch_add(3);
+
     for (int i = 0; i < 3; ++i) {
         workers[i] =
             std::thread(random_hull::process_ridge, std::cref(edges[i]),
@@ -67,7 +69,6 @@ random_hull::__convex_hull(const std::vector<Point> &points) {
     for (int i = 0; i < 3; ++i) {
         workers[i].join();
     }
-
     return H;
 }
 
@@ -111,18 +112,12 @@ random_hull::__convex_hull__sequential(const std::vector<Point> &points) {
         process_ridge_sequential(edges[i], points[(i + 1) % 3],
                                  edges[(i + 1) % 3], points);
     }
-
     return H;
 }
 
 std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
 
-    auto start = std::chrono::steady_clock::now();
-    const auto &H = random_hull ::__convex_hull__sequential(points);
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> timer = end - start;
-
-    std::cout << timer.count() << "\n";
+    random_hull ::__convex_hull__sequential(points);
 
     std::unordered_set<Point> hash_set;
 
@@ -142,23 +137,23 @@ std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
 std::vector<Point>
 random_hull::convex_hull_parallel(std::vector<Point> &points) {
 
-    const auto &H = random_hull ::__convex_hull(points);
+    random_hull ::__convex_hull(points);
 
-    std::unordered_set<Point> hash_set;
-
-    for (const auto &x : H) {
-        // std::cout << x.first << " " << x.second << "\n";
-        hash_set.insert(x.first);
-        hash_set.insert(x.second);
-    }
-
-    std::vector<Point> result;
-
-    for (const auto &iter : hash_set) {
-        result.push_back(iter);
-    }
-
-    return result;
+     //std::unordered_set<Point> hash_set;
+ //
+     //for (const auto &x : H) {
+         //// std::cout << x.first << " " << x.second << "\n";
+         //hash_set.insert(x.first);
+         //hash_set.insert(x.second);
+     //}
+ //
+     //std::vector<Point> result;
+ //
+     //for (const auto &iter : hash_set) {
+         //result.push_back(iter);
+     //}
+ //
+     return {};
 }
 
 void random_hull::build_c(Edge &t, const std::vector<Point> &points,
@@ -218,7 +213,6 @@ void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
         return;
     }
 
-
     size_t index = get_min(C[t1]);
 
     // std::cout << index << " ";
@@ -261,6 +255,7 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
 
     if (get_min(C[t2]) < get_min(C[t1])) {
         process_ridge(t2, r, t1, points);
+
         return;
     }
 
@@ -282,13 +277,35 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     if (r2 == r)
         std::swap(r1, r2);
     std::thread worker1, worker2;
-    worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r1),
-                          std::cref(t2), std::cref(points));
+    bool a = false, b = false;
+    if (cur_threads.load() < NUM_THREADS) {
+        worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r1),
+                              std::cref(t2), std::cref(points));
+        cur_threads.fetch_add(1);
+        a = true;
+    } else {
 
-    worker2 = std::thread(&process_other_ridge, std::cref(r2), std::cref(t),
-                          std::cref(points));
-    worker1.join();
-    worker2.join();
+        process_ridge_sequential(t, r1, t2, points);
+    }
+
+    if (cur_threads.load() < NUM_THREADS) {
+        worker2 = std::thread(&process_other_ridge, std::cref(r2), std::cref(t),
+                              std::cref(points));
+        cur_threads.fetch_add(1);
+        b = true;
+
+    } else {
+
+        process_other_ridge_sequential(r2, t, points);
+    }
+    if (a) {
+        worker1.join();
+        cur_threads.fetch_sub(1);
+    }
+    if (b) {
+        worker2.join();
+        cur_threads.fetch_sub(1);
+    }
 }
 
 void random_hull::process_other_ridge(const Point &r1, const Edge &t,
@@ -321,10 +338,8 @@ void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
                              const random_hull::Edge &t,
                              const std::vector<Point> &points) {
 
-    std::unique_lock<std::mutex> uq_lk(C_mtx);
     const auto &set1 = C[t1];
     const auto &set2 = C[t2];
-    uq_lk.unlock();
 
     std::vector<int> merged_sets_temp(set1.size() + set2.size());
     std::merge(set1.begin(), set1.end(), set2.begin(), set2.end(),
@@ -345,7 +360,6 @@ void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
 
     std::lock_guard<std::mutex> lk(C_mtx);
     C[t] = std::move(merged_sets);
-
 }
 
 void random_hull::print_ridge(const random_hull::Edge &t1,
