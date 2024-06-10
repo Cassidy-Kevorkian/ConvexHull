@@ -98,7 +98,6 @@ random_hull::__convex_hull__sequential(const std::vector<Point> &points) {
 
     // printf("\nprinting edges:\n");
     for (auto &edge : edges) {
-        // std::cout << edge.first << " " << edge.second << std::endl;
         H.insert(edge);
     }
 
@@ -128,7 +127,6 @@ std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
     std::unordered_set<Point> hash_set;
 
     for (const auto &x : H) {
-        // std::cout << x.first << " " << x.second << "\n";
         hash_set.insert(x.first);
         hash_set.insert(x.second);
     }
@@ -220,7 +218,6 @@ void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
         return;
     }
 
-    // print_ridge(t1, t2, r);
 
     size_t index = get_min(C[t1]);
 

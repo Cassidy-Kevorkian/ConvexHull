@@ -7,7 +7,7 @@
 #include <vector>
 
 
-struct GrahamScanParallel::undirected_linked_point {
+struct graham_scan_parallel::undirected_linked_point {
     undirected_linked_point(Point point) {
         value = point;
         next = NULL;
@@ -15,11 +15,11 @@ struct GrahamScanParallel::undirected_linked_point {
     }
 
     Point value;
-    GrahamScanParallel::undirected_linked_point *next;
-    GrahamScanParallel::undirected_linked_point *prev;
+    graham_scan_parallel::undirected_linked_point *next;
+    graham_scan_parallel::undirected_linked_point *prev;
 };
 
-void GrahamScanParallel::convexify(GrahamScanParallel::undirected_linked_point *begin, GrahamScanParallel::undirected_linked_point *end) {
+void graham_scan_parallel::convexify(graham_scan_parallel::undirected_linked_point *begin, graham_scan_parallel::undirected_linked_point *end) {
 
     // treating small cases
     if ((begin == end) || (begin->next == end)) {
@@ -27,12 +27,12 @@ void GrahamScanParallel::convexify(GrahamScanParallel::undirected_linked_point *
         return;
     }
 
-    GrahamScanParallel::undirected_linked_point *pred = begin;
-    GrahamScanParallel::undirected_linked_point *curr = begin->next;
+    graham_scan_parallel::undirected_linked_point *pred = begin;
+    graham_scan_parallel::undirected_linked_point *curr = begin->next;
 
     while (curr != end) {
 
-        GrahamScanParallel::undirected_linked_point *succ = curr->next;
+        graham_scan_parallel::undirected_linked_point *succ = curr->next;
 
         while ((pred != begin) && !is_convex(pred->value, curr->value, succ->value)) {
             pred->next = succ;
@@ -47,14 +47,14 @@ void GrahamScanParallel::convexify(GrahamScanParallel::undirected_linked_point *
 }
 
 
-void GrahamScanParallel::convex_hull_rec(GrahamScanParallel::undirected_linked_point *begin, GrahamScanParallel::undirected_linked_point *end,
+void graham_scan_parallel::convex_hull_rec(graham_scan_parallel::undirected_linked_point *begin, graham_scan_parallel::undirected_linked_point *end,
                    int num_points, const int chunk_sz) {
 
     if (num_points > chunk_sz) {
 
         int num_points_left = num_points / 2,
             num_points_right = num_points - num_points_left;
-        GrahamScanParallel::undirected_linked_point *mid = begin;
+        graham_scan_parallel::undirected_linked_point *mid = begin;
 
         for (int i = 0; i < num_points_left; ++i) {
             mid = mid->next;
@@ -70,7 +70,7 @@ void GrahamScanParallel::convex_hull_rec(GrahamScanParallel::undirected_linked_p
     convexify(begin, end);
 }
 
-void GrahamScanParallel::FindMin(std::vector<Point> &points, int nproc, Point &min_point) {
+void graham_scan_parallel::find_min(std::vector<Point> &points, int nproc, Point &min_point) {
     int num_points = points.size();
     int chunk_sz = num_points / nproc;
 
@@ -78,18 +78,20 @@ void GrahamScanParallel::FindMin(std::vector<Point> &points, int nproc, Point &m
     std::vector<Point> min_points(nproc);
 
     int start = 0, end = num_points;
+
     for (int i = 0; i < nproc; ++i) {
         int new_end = (i == nproc-1) ? num_points : start + chunk_sz;
-        threads[i] = std::thread(GrahamScanParallel::FindMinThread, std::ref(points), start, end, std::ref(min_points[i]));
+        threads[i] = std::thread(graham_scan_parallel::find_min_thread, std::ref(points), start, end, std::ref(min_points[i]));
         start = new_end;
     }
     for(int i = 0; i < nproc; ++i) {
         threads[i].join();
     }   
-    GrahamScanParallel::FindMinThread(min_points, 0, nproc, min_point);
+
+    graham_scan_parallel::find_min_thread(min_points, 0, nproc, min_point);
 }
 
-void GrahamScanParallel::FindMinThread(std::vector<Point> &points, const int start, const int end, Point &min_point){
+void graham_scan_parallel::find_min_thread(std::vector<Point> &points, const int start, const int end, Point &min_point){
     Point P = points[start];
     for (int i = start; i < end; ++i) {
         if (points[i].y < P.y || (points[i].y == P.y && points[i].x < P.x)) {
@@ -99,28 +101,28 @@ void GrahamScanParallel::FindMinThread(std::vector<Point> &points, const int sta
     min_point = P;
 }
 
-std::vector<Point> GrahamScanParallel::convex_hull(std::vector<Point> &points) {
+std::vector<Point> graham_scan_parallel::convex_hull(std::vector<Point> &points) {
 	int NPROC = 10;
    // Point P = points[0];
     int num_points = points.size();
 
     Point P;
-    GrahamScanParallel::FindMin(points, NPROC, P);
+    graham_scan_parallel::find_min(points, NPROC, P);
 
     int chunk_sz = num_points / NPROC;
     chunk_sz = std::max(chunk_sz, 1);
-	ParallelSorting::sample_sort(points, 0, num_points, chunk_sz, P);
-    GrahamScanParallel::undirected_linked_point *root = new GrahamScanParallel::undirected_linked_point(P); // P = points[0]
-    GrahamScanParallel::undirected_linked_point *iter = root;
+	parallel_sorting::sample_sort(points, 0, num_points, chunk_sz, P);
+    graham_scan_parallel::undirected_linked_point *root = new graham_scan_parallel::undirected_linked_point(P); // P = points[0]
+    graham_scan_parallel::undirected_linked_point *iter = root;
 
     for (int i = 1; i < num_points; ++i) {
-        GrahamScanParallel::undirected_linked_point *helper = new GrahamScanParallel::undirected_linked_point(points[i]);
+        graham_scan_parallel::undirected_linked_point *helper = new graham_scan_parallel::undirected_linked_point(points[i]);
         iter->next = helper;
         helper->prev = iter;
         iter = iter->next;
     }
 
-    GrahamScanParallel::undirected_linked_point *begin = root, *end = iter;
+    graham_scan_parallel::undirected_linked_point *begin = root, *end = iter;
 
     // we make sure the linked lists makes a full circle here
     end->next = begin;
@@ -154,7 +156,7 @@ int main() {
                 points.push_back(Point(a, b));
         }
 
-        std::vector<Point> convex_hull = GrahamScanParallel::ConvexHull(points,
+        std::vector<Point> convex_hull = graham_scan_parallel::ConvexHull(points,
 NPROC);
 
         for(auto point: convex_hull) {
