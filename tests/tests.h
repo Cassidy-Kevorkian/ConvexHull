@@ -14,4 +14,5 @@ void generate_tests();
 void run_tests(std::vector<std::string> types, std::vector<Point> F(std::vector<Point> &));
 void run_file(const std::string &file_name);
 
+
 } // namespace test

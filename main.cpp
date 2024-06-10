@@ -16,29 +16,29 @@
 
 int main() {
 
-    random_hull_testing::testing_suite_multimap();
-    random_hull_testing::testing_convex_hull();
-    random_hull_testing::testing_is_visible();
-    random_hull_testing::testing_build_c();
-    random_hull_testing::testing_process_ridge();
-    random_hull_testing::testing_merge_sets();
-
-    random_hull_testing::testing_join();
-    random_hull_testing::testing_process_other_ridge();
+     //random_hull_testing::testing_suite_multimap();
+     //random_hull_testing::testing_convex_hull();
+     //random_hull_testing::testing_is_visible();
+     //random_hull_testing::testing_build_c();
+     //random_hull_testing::testing_process_ridge();
+     //random_hull_testing::testing_merge_sets();
+ //
+     //random_hull_testing::testing_join();
+     //random_hull_testing::testing_process_other_ridge();
 
     // test::generate_tests();
 
-      test::check_test("../tests/test_muie_1.txt",
-      "../tests/correction_muie_1.txt",
-      random_hull::convex_hull);
+    test::check_test("../tests/test_100000_average.txt",
+                     "../tests/correction_100000_average.txt",
+                     random_hull::convex_hull_parallel);
 
-      //test::check_test("../tests/test_muie_2.txt",
-      //"../tests/correction_muie_2.txt",
-      //random_hull::convex_hull);
+    // test::check_test("../tests/test_muie_2.txt",
+    //"../tests/correction_muie_2.txt",
+    // random_hull::convex_hull);
 
-      //test::check_test("../tests/test_muie_3.txt",
-      //"../tests/correction_muie_3.txt",
-      //random_hull::convex_hull);
+    // test::check_test("../tests/test_muie_3.txt",
+    //"../tests/correction_muie_3.txt",
+    // random_hull::convex_hull);
 
     return 0;
 }
