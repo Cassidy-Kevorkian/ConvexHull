@@ -178,9 +178,9 @@ void test::generate_circle_test(
 
 void test::generate_tests() {
     srand(time(0));
-	test::generate_circle_test(100, "few");
-	test::generate_circle_test(100, "average");
-	test::generate_circle_test(100, "many");
+	test::generate_circle_test(1000000, "few");
+	test::generate_circle_test(1000000, "average");
+	test::generate_circle_test(1000000, "many");
 }
 
 void test::check_test(const std::string &input_test,
