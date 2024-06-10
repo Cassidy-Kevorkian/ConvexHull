@@ -22,15 +22,12 @@ int main() {
      //random_hull_testing::testing_build_c();
      //random_hull_testing::testing_process_ridge();
      //random_hull_testing::testing_merge_sets();
- //
-     //random_hull_testing::testing_join();
+  	//random_hull_testing::testing_join();
      //random_hull_testing::testing_process_other_ridge();
 
-    // test::generate_tests();
+    //test::generate_tests();
 
-    test::check_test("../tests/test_1000000_average.txt",
-                     "../tests/correction_1000000_average.txt",
-                     random_hull::convex_hull_parallel);
+	test::check_test("../tests/test_files/circle_test_1000000_average.txt","../tests/test_files/circle_correction_1000000_average.txt", random_hull::convex_hull_parallel);
 
     // test::check_test("../tests/test_muie_2.txt",
     //"../tests/correction_muie_2.txt",

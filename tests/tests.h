@@ -4,7 +4,7 @@
 #include <vector>
 namespace test {
 
-void generate_tests_helper(int n, const std::string &type);
+void generate_circle_test(int n, const std::string &type);
 
 void check_test(const std::string &input_test, const std::string &correction,
                 std::vector<Point> F(std::vector<Point> &));
