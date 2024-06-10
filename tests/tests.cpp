@@ -3,22 +3,22 @@
 #include <GrahamScan.h>
 #include <QuickHull.h>
 #include <QuickHullParallel.h>
+#include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <ctime>
 #include <fstream>
 #include <iostream>
 #include <points.h>
-#include <random> 
+#include <random>
 #include <string>
 #include <unordered_set>
 #include <vector>
-#include <algorithm>
-#include <string>
 
 // main takes two parameters n and the type of test
 
-std::vector<int> values_tested =  {100, 1000, 10000, 100000, 1000000, 10000000, 30000000};
+std::vector<int> values_tested = {100,     1000,     10000,   100000,
+                                  1000000, 10000000, 30000000};
 
 void test::run_file(const std::string &file_name) {
     std::ifstream file(file_name);
@@ -65,7 +65,8 @@ void test::run_file(const std::string &file_name) {
     }
 
     std::vector<Point> convex_hull_quick_hull = QuickHull(points);
-    // std::cout << std::endl << "QuickHull convex hull:" << std::endl;
+    // std::cout << std::endl << "QuickHull convex hull:" <<
+    // std::endl;
     file2 << convex_hull_quick_hull.size() << std::endl;
 
     for (Point point : convex_hull_quick_hull) {
@@ -84,7 +85,8 @@ void test::run_file(const std::string &file_name) {
 
     std::vector<Point> convex_hull_quick_hull_parallel =
         QuickHullParallel(points);
-    // std::cout << std::endl << "QuickHullParallel convex hull:" << std::endl;
+    // std::cout << std::endl << "QuickHullParallel convex hull:" <<
+    // std::endl;
     file3 << convex_hull_quick_hull_parallel.size() << std::endl;
 
     for (Point point : convex_hull_quick_hull_parallel) {
@@ -94,18 +96,24 @@ void test::run_file(const std::string &file_name) {
     file3.close();
 }
 
-void test::run_tests(std::vector<std::string> types,std::vector<Point> F(std::vector<Point> &)) {
-    for (auto type: types){
-        for (auto n: values_tested){
+void test::run_tests(std::vector<std::string> types,
+                     std::vector<Point> F(std::vector<Point> &)) {
+    for (auto type : types) {
+        for (auto n : values_tested) {
             std::cout << "Test " << n << " " << type << "\n";
-            test::check_test("../tests/test_"+ std::to_string(n) + "_" + type + ".txt", "../tests/correction_" + std::to_string(n) + "_" + type + ".txt", F);
-
+            test::check_test("../tests/test_" + std::to_string(n) +
+                                 "_" + type + ".txt",
+                             "../tests/correction_" +
+                                 std::to_string(n) + "_" + type +
+                                 ".txt",
+                             F);
         }
     }
 }
 
 void test::generate_tests_helper(
-    int n, const std::string &type) { // open a file to write the test cases
+    int n,
+    const std::string &type) { // open a file to write the test cases
     double ratio;
     if (type == "few") {
         ratio = 0.1;
@@ -118,8 +126,10 @@ void test::generate_tests_helper(
         return;
     }
 
-    std::ofstream file1("../tests/test_"+ std::to_string(n)+ "_" + type + ".txt");
-    std::ofstream file2("../tests/correction_" + std::to_string(n) + "_" + type + ".txt");
+    std::ofstream file1("../tests/test_" + std::to_string(n) + "_" +
+                        type + ".txt");
+    std::ofstream file2("../tests/correction_" + std::to_string(n) +
+                        "_" + type + ".txt");
     if (!file1.is_open()) {
         std::cerr << "Error opening file" << std::endl;
         return;
@@ -139,8 +149,10 @@ void test::generate_tests_helper(
     double y_center = 0.0;
 
     for (size_t i = 0; i < hull_points; ++i) {
-        double x = x_center + radius * std::cos(2 * M_PI * i / hull_points);
-        double y = y_center + radius * std::sin(2 * M_PI * i / hull_points);
+        double x =
+            x_center + radius * std::cos(2 * M_PI * i / hull_points);
+        double y =
+            y_center + radius * std::sin(2 * M_PI * i / hull_points);
         // print points to file
         file1 << x << " " << y << std::endl;
         file2 << x << " " << y << std::endl;
@@ -163,16 +175,16 @@ void test::generate_tests_helper(
 
 void test::generate_tests() {
     srand(time(0));
-    for (auto n: values_tested){
+    for (auto n : values_tested) {
         test::generate_tests_helper(n, "few");
         test::generate_tests_helper(n, "average");
         test::generate_tests_helper(n, "many");
     }
-
 }
 
-void test::check_test(const std::string &input_test, const std::string &correction,
-                std::vector<Point> F(std::vector<Point> &)) {
+void test::check_test(const std::string &input_test,
+                      const std::string &correction,
+                      std::vector<Point> F(std::vector<Point> &)) {
 
     std::ifstream input_file(input_test), correct_file(correction);
 
@@ -200,14 +212,8 @@ void test::check_test(const std::string &input_test, const std::string &correcti
     std::vector<Point> result = F(test_points);
     auto end = std::chrono::steady_clock::now();
     std::chrono::duration<double> timer = end - start;
-    std::cout << timer.count() << " ";
 
-    std::unordered_set<Point> my_result;
-    for (const auto &point : result) {
-        my_result.emplace(point);
-    }
-
-    std::unordered_set<Point> correct_result;
+    std::vector<Point> correct_result;
     if (!correct_file.is_open()) {
         std::cerr << "Error opening the second file" << std::endl;
         return;
@@ -217,81 +223,102 @@ void test::check_test(const std::string &input_test, const std::string &correcti
 
     for (size_t i = 0; i < number_tests; ++i) {
         correct_file >> a >> b;
-        correct_result.emplace(Point(a, b));
+        correct_result.push_back(Point(a, b));
     }
 
-    if (correct_result != my_result) {
-        std::cout << "Test failed\n";
-        std::cout << correct_result.size() << " " << my_result.size()<<std::endl;
-    } else {
-        std::cout << "Test succeeded\n";
+    std::sort(result.begin(), result.end());
+    std::sort(correct_result.begin(), correct_result.end());
+
+    printf("Debugging function compare_tests in tests.cpp\n");
+
+    if (result.size() != correct_result.size()) {
+        printf("Files do not match\n");
     }
-   // std::cout << "Number of points: " << number_tests << " "; 
+
+    for (size_t i = 0; i < result.size(); ++i) {
+        if (i >= correct_result.size()) {
+            printf("(%10f,  %10f) || (%7sN/A, %7sN/A)\n", result[i].x,
+                   result[i].y, "", "");
+            continue;
+        }
+        printf("(%10f,  %10f) || (%10f, %10f)\n", result[i].x,
+               result[i].y, correct_result[i].x, correct_result[i].y);
+    }
+    printf("%25zu ||  %22zu\n", result.size(), correct_result.size());
+    printf("%25s || %22s\n", input_test.c_str(), correction.c_str());
+
+    if (result != correct_result) {
+        printf("\nFiles do not match!. Test failed! \n");
+    } else {
+        printf("\nFiles do match. Test passed! \n");
+    }
+
+    printf("\nEXECUTION TIME : %9f\n", timer.count());
+
+    // std::cout << "Number of points: " << number_tests << " ";
 
     correct_file.close();
 }
 
-
-void test::compare_files(const std::string &file1, const std::string &file2){
+void test::compare_files(const std::string &file1,
+                         const std::string &file2) {
     std::ifstream file_a(file1), file_b(file2);
 
-    if(!file_a.is_open()) {
+    if (!file_a.is_open()) {
         std::cerr << "Error opening file number 1\n";
         return;
     }
 
-
-    int line_number; 
+    int line_number;
 
     file_a >> line_number;
 
-    if(line_number == 0) {
+    if (line_number == 0) {
         throw "Error line_number is 0. Stopping...";
     }
 
-    std::vector<std::pair<double,double>> lines_a(line_number);
+    std::vector<std::pair<double, double>> lines_a(line_number);
 
-    for(size_t i = 0; i < line_number; ++i) {
+    for (size_t i = 0; i < line_number; ++i) {
         file_a >> lines_a[i].first >> lines_a[i].second;
     }
 
-    if(!file_b.is_open()) {
+    if (!file_b.is_open()) {
         std::cerr << "Error opening file number 2\n";
         return;
     }
 
-
     file_b >> line_number;
 
-    if(line_number == 0) {
+    if (line_number == 0) {
         throw "Error line_number is 0. Stopping...";
     }
 
-    std::vector<std::pair<double,double>> lines_b(line_number);
+    std::vector<std::pair<double, double>> lines_b(line_number);
 
-    for(size_t i = 0; i < line_number; ++i) {
+    for (size_t i = 0; i < line_number; ++i) {
         file_b >> lines_b[i].first >> lines_b[i].second;
     }
 
-
     std::sort(lines_a.begin(), lines_a.end());
     std::sort(lines_b.begin(), lines_b.end());
-    
+
     printf("Debugging function compare_tests in tests.cpp\n");
 
-    if(lines_a.size() != lines_b.size()) {
+    if (lines_a.size() != lines_b.size()) {
         printf("Files do not match\n");
     }
 
-    for(size_t i = 0; i < lines_a.size(); ++i) {
-        printf("(%10f,  %10f) || (%10f, %10f)\n", lines_a[i].first, lines_a[i].second, lines_b[i].first, lines_b[i].second);
+    for (size_t i = 0; i < lines_a.size(); ++i) {
+        printf("(%10f,  %10f) || (%10f, %10f)\n", lines_a[i].first,
+               lines_a[i].second, lines_b[i].first,
+               lines_b[i].second);
     }
     printf("%25zu ||  %22zu\n", lines_a.size(), lines_b.size());
     printf("%25s || %22s", file1.c_str(), file2.c_str());
-    std::cout <<"\n";
+    std::cout << "\n";
 
-    
-    if(lines_a != lines_b) {
+    if (lines_a != lines_b) {
         printf("Files do not match \n");
     } else {
         printf("Files do match \n");
@@ -299,6 +326,5 @@ void test::compare_files(const std::string &file1, const std::string &file2){
 
     file_a.close();
     file_b.close();
-
 }
 

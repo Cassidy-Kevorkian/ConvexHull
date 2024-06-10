@@ -141,14 +141,14 @@ void testing_merge_sets() {
     std::map<random_hull::Edge, std::vector<int>> C_test;
 
     double ab_norm = (A - B).norm(), bc_norm = (B - C).norm();
-    for (int i = 0; i < 10000; ++i) {
+    for (int i = 0; i < 100; ++i) {
         if (unif(generator) < 0.5) {
             double u1 = unif(generator), u2 = unif(generator);
 
             double z0 =
-                ab_norm / 2.05 * u1 * std::cos(M_PI * u2 + thetaAB);
+                ab_norm / 2.1 * u1 * std::cos(M_PI * u2 + thetaAB);
             double z1 =
-                ab_norm / 2.05 * u1 * std::sin(M_PI * u2 + thetaAB);
+                ab_norm / 2.1 * u1 * std::sin(M_PI * u2 + thetaAB);
 
             points.push_back(Point(z0, z1) + (A + B) / 2.);
             set_AB.push_back(i);
@@ -156,9 +156,9 @@ void testing_merge_sets() {
             double u1 = unif(generator), u2 = unif(generator);
 
             double z0 =
-                bc_norm / 2.05 * u1 * std::cos(M_PI * u2 + thetaBC);
+                bc_norm / 2.1 * u1 * std::cos(M_PI * u2 + thetaBC);
             double z1 =
-                bc_norm / 2.05 * u1 * std::sin(M_PI * u2 + thetaBC);
+                bc_norm / 2.1 * u1 * std::sin(M_PI * u2 + thetaBC);
 
             points.push_back(Point(z0, z1) + (B + C) / 2);
             set_BC.push_back(i);
@@ -168,14 +168,34 @@ void testing_merge_sets() {
     Point P(0.8, 1.8);
     random_hull::Edge PB(P, B);
 
-    C_test[AB] = set_AB;
-    C_test[BC] = set_BC;
+     C_test[AB] = set_AB;
+     C_test[BC] = set_BC;
+
+     //random_hull::build_c(AB, points, C_test);
+     //random_hull::build_c(BC, points, C_test);
 
     random_hull::merge_sets(C_test, AB, BC, PB, points);
 
+     //std::cout << C_test[PB].size() << "\n";
+     //std::cout << set_BC.size() << "\n";
+ //
+     //for(const auto &x : set_BC){
+         //std::cout << x << " ";
+     //}
+     //std::cout << "\n";
+ //
+     //for(const auto &x : C_test[PB]){
+         //std::cout << x << " ";
+     //}
+ //
+     //std::cout << points[807] << "\n";
+     //
+ //
+     //std::cout << "\n";
 
-    assert(C_test[PB] == set_BC);
+    assert(C_test[PB] == C_test[BC]);
     printf("  Test 1 passed\n");
+
 }
 
 

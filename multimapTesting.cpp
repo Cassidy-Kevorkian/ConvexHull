@@ -90,8 +90,8 @@ void testing_multimap_insert_and_set() {
     // We have not implemented this in our code
 }
 
-// void testing_multimap_insert_and_set_thread(const Point &point, const
-// random_hull::Edge &edge) {
+// void testing_multimap_insert_and_set_thread(const Point &point,
+// const random_hull::Edge &edge) {
 //
 // }
 
