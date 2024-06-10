@@ -139,21 +139,21 @@ random_hull::convex_hull_parallel(std::vector<Point> &points) {
 
     random_hull ::__convex_hull(points);
 
-     //std::unordered_set<Point> hash_set;
- //
-     //for (const auto &x : H) {
-         //// std::cout << x.first << " " << x.second << "\n";
-         //hash_set.insert(x.first);
-         //hash_set.insert(x.second);
-     //}
- //
-     //std::vector<Point> result;
- //
-     //for (const auto &iter : hash_set) {
-         //result.push_back(iter);
-     //}
- //
-     return {};
+     std::unordered_set<Point> hash_set;
+ 
+     for (const auto &x : H) {
+         // std::cout << x.first << " " << x.second << "\n";
+         hash_set.insert(x.first);
+         hash_set.insert(x.second);
+     }
+ 
+     std::vector<Point> result;
+ 
+     for (const auto &iter : hash_set) {
+         result.push_back(iter);
+     }
+ 
+     return result;
 }
 
 void random_hull::build_c(Edge &t, const std::vector<Point> &points,
