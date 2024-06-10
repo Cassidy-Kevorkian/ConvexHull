@@ -21,9 +21,7 @@ random_hull::__convex_hull(const std::vector<Point> &points) {
     if (points.size() <= 3)
         return {};
 
-    std::vector<Edge> edges = {Edge(points[0], points[1]),
-                               Edge(points[1], points[2]),
-                               Edge(points[2], points[0])};
+    std::vector<Edge> edges;
 
     if (!is_visible(points[2], Edge(points[0], points[1]))) {
         edges.push_back(Edge(points[0], points[1]));
@@ -78,11 +76,9 @@ std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
     if (points.size() <= 3)
         return {};
 
-    std::vector<Edge> edges = {Edge(points[0], points[1]),
-                               Edge(points[1], points[2]),
-                               Edge(points[2], points[0])};
+    std::vector<Edge> edges;
 
-    if (!is_visible(points[2], Edge(points[0], points[1]))) {
+	if (!is_visible(points[2], Edge(points[0], points[1]))) {
         edges.push_back(Edge(points[0], points[1]));
     } else {
         edges.push_back(Edge(points[1], points[0]));
@@ -100,7 +96,9 @@ std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
         edges.push_back(Edge(points[2], points[0]));
     }
 
+	printf("\nprinting edges:\n");
     for (auto &edge : edges) {
+		std::cout << edge.first << " " << edge.second << std::endl;
         H.insert(edge);
     }
 
