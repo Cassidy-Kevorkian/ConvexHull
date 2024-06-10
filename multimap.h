@@ -26,7 +26,7 @@ template <typename Key, typename Tp> class multimap {
 
   public:
     multimap() {
-        __capacity = 40000;
+        __capacity = 1000000;
         __table = new Entry<Key, Tp>[__capacity];
     }
 
