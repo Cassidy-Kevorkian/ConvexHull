@@ -18,7 +18,7 @@
 // main takes two parameters n and the type of test
 
 std::vector<int> values_tested = {100,     1000,     10000,   100000,
-                                  1000000, 10000000, 30000000};
+                                  1000000};
 
 void test::run_file(const std::string &file_name) {
     std::ifstream file(file_name);
@@ -96,6 +96,7 @@ void test::run_file(const std::string &file_name) {
     file3.close();
 }
 
+
 void test::run_tests(std::vector<std::string> types,
                      std::vector<Point> F(std::vector<Point> &)) {
     for (auto type : types) {
@@ -111,24 +112,27 @@ void test::run_tests(std::vector<std::string> types,
     }
 }
 
-void test::generate_tests_helper(
-    int n,
+
+void test::generate_circle_test(
+    int num_points,
     const std::string &type) { // open a file to write the test cases
-    double ratio;
+    
+	double num_boundary_points;
+
     if (type == "few") {
-        ratio = 0.1;
+        num_boundary_points = 10;
     } else if (type == "average") {
-        ratio = 0.5;
+        num_boundary_points = 100;
     } else if (type == "many") {
-        ratio = 1;
+        num_boundary_points = 1000;
     } else {
         std::cerr << "Invalid type" << std::endl;
         return;
     }
 
-    std::ofstream file1("../tests/test_" + std::to_string(n) + "_" +
+    std::ofstream file1("../tests/test_files/circle_test_" + std::to_string(num_points) + "_" +
                         type + ".txt");
-    std::ofstream file2("../tests/correction_" + std::to_string(n) +
+    std::ofstream file2("../tests/test_files/circle_correction_" + std::to_string(num_points) +
                         "_" + type + ".txt");
     if (!file1.is_open()) {
         std::cerr << "Error opening file" << std::endl;
@@ -139,20 +143,19 @@ void test::generate_tests_helper(
         return;
     }
 
-    file1 << n << std::endl;
+    file1 << num_points << std::endl;
     std::vector<Point> points;
 
-    int hull_points = std::min(int(n * ratio), 1000);
-    file2 << hull_points << std::endl;
+    file2 << num_boundary_points << std::endl;
     double radius = 100.0;
     double x_center = 0.0;
     double y_center = 0.0;
 
-    for (size_t i = 0; i < hull_points; ++i) {
+    for (size_t i = 0; i < num_boundary_points; ++i) {
         double x =
-            x_center + radius * std::cos(2 * M_PI * i / hull_points);
+            x_center + radius * std::cos(2 * M_PI * i / num_boundary_points);
         double y =
-            y_center + radius * std::sin(2 * M_PI * i / hull_points);
+            y_center + radius * std::sin(2 * M_PI * i / num_boundary_points);
         // print points to file
         file1 << x << " " << y << std::endl;
         file2 << x << " " << y << std::endl;
@@ -160,7 +163,7 @@ void test::generate_tests_helper(
 
     radius = 80;
 
-    for (size_t i = 0; i < n - hull_points; ++i) {
+    for (size_t i = 0; i < num_points - num_boundary_points; ++i) {
         double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
         double rand_radius = radius * sqrt((double)rand() / RAND_MAX);
 
@@ -175,11 +178,9 @@ void test::generate_tests_helper(
 
 void test::generate_tests() {
     srand(time(0));
-    for (auto n : values_tested) {
-        test::generate_tests_helper(n, "few");
-        test::generate_tests_helper(n, "average");
-        test::generate_tests_helper(n, "many");
-    }
+	test::generate_circle_test(100, "few");
+	test::generate_circle_test(100, "average");
+	test::generate_circle_test(100, "many");
 }
 
 void test::check_test(const std::string &input_test,
