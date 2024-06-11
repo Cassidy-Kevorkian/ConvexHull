@@ -62,9 +62,7 @@ void test::run_file(const std::string &file_name) {
         return;
     }
 
-    std::vector<Point> convex_hull_quick_hull = QuickHull(points);
-    // std::cout << std::endl << "QuickHull convex hull:" <<
-    // std::endl;
+    std::vector<Point> convex_hull_quick_hull = quick_hull::convex_hull(points);
     file2 << convex_hull_quick_hull.size() << std::endl;
 
     for (Point point : convex_hull_quick_hull) {
@@ -82,9 +80,7 @@ void test::run_file(const std::string &file_name) {
     }
 
     std::vector<Point> convex_hull_quick_hull_parallel =
-        QuickHullParallel(points);
-    // std::cout << std::endl << "QuickHullParallel convex hull:" <<
-    // std::endl;
+        quick_hull::convex_hull_parallel(points);
     file3 << convex_hull_quick_hull_parallel.size() << std::endl;
 
     for (Point point : convex_hull_quick_hull_parallel) {
