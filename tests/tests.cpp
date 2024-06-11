@@ -16,6 +16,8 @@
 #include <vector>
 
 std::vector<int> values_tested = {100, 1000, 10000, 100000, 1000000};
+std::default_random_engine
+    eng(10012);
 
 void test::run_file(const std::string &file_name) {
     std::ifstream file(file_name);
@@ -45,7 +47,8 @@ void test::run_file(const std::string &file_name) {
         return;
     }
 
-    std::vector<Point> convex_hull_graham_scan = graham_scan::convex_hull(points);
+    std::vector<Point> convex_hull_graham_scan =
+        graham_scan::convex_hull(points);
     file1 << convex_hull_graham_scan.size() << std::endl;
 
     for (Point point : convex_hull_graham_scan) {
@@ -368,6 +371,7 @@ void test::check_test(const std::string &input_test,
 
     input_file.close();
 
+    std::shuffle(test_points.begin(), test_points.end(), eng);
     auto start = std::chrono::steady_clock::now();
     std::vector<Point> result = F(test_points);
     auto end = std::chrono::steady_clock::now();

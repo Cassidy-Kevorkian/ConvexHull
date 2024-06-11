@@ -97,6 +97,7 @@ const Tp &multimap<Key, Tp>::get_value(const Key &key, const Tp &not_value) {
     size_t i = get_entry(key);
 
     while (__table[i].taken.load()) {
+      //std::cout << "D" << "\n";
         if (__table[i].get_key() == key) {
 
             if (__table[i].get_value() != not_value) {

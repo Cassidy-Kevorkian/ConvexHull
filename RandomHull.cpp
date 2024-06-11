@@ -3,10 +3,12 @@
 #include <multimap.h>
 #include <mutex>
 #include <ostream>
+#include <random>
 #include <thread>
 #include <unordered_set>
 #include <utility>
 #include <vector>
+
 
 std::set<random_hull::Edge>
 random_hull::__convex_hull(convex_hull_parameters *const parameters) {
@@ -134,6 +136,8 @@ std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
     std::mutex H_mtx;
 
     random_hull::multimap<Point, random_hull::Edge> M(10000000);
+
+    //std::shuffle(points.begin(), points.end(), rng);
     convex_hull_parameters parameters(1, H, H_mtx, C, C_mtx, M, points);
 
     random_hull ::__convex_hull__sequential(&parameters);
@@ -163,7 +167,7 @@ random_hull::convex_hull_parallel(std::vector<Point> &points) {
     std::set<random_hull::Edge> H;
     std::mutex H_mtx;
 
-    random_hull::multimap<Point, random_hull::Edge> M(points.size());
+    random_hull::multimap<Point, random_hull::Edge> M(10000000);
     convex_hull_parameters parameters(1, H, H_mtx, C, C_mtx, M, points);
 
     random_hull ::__convex_hull(&parameters);
@@ -231,6 +235,7 @@ void random_hull::process_ridge_sequential(
     // std::cout << r << "\n";
     //std::cout <<  r <<"\n";
     //std::cout << "A" << "\n";
+    //std::cout <<"cur" << "\n";
 
     auto &C = parameters->C;
     auto &C_mtx = parameters->C_mtx;
