@@ -5,7 +5,7 @@
 
 const double tolerance = 1e-10;
 
-Point FurthestPointFromLine(Line &l, std::vector<Point> &points){
+Point quick_hull::furthest_point_from_line(Line &l, std::vector<Point> &points){
 
     Point furthest_point = points[0];
 
@@ -18,7 +18,8 @@ Point FurthestPointFromLine(Line &l, std::vector<Point> &points){
     return furthest_point;
 }
 
-std::vector<std::vector<Point>> GeneratePartition(Point &p, Point &q,
+
+std::vector<std::vector<Point>> quick_hull::generate_partition(Point &p, Point &q,
                                                   std::vector<Point> &points){
     std::vector<std::vector<Point>> partition;
     std::vector<Point> part_1, part_2;
@@ -38,7 +39,8 @@ std::vector<std::vector<Point>> GeneratePartition(Point &p, Point &q,
     return {part_1, part_2};
 }
 
-std::vector<Point> GeneratePointsOutside(Point &p, Point &q, Point &furthest_point,
+
+std::vector<Point> quick_hull::generate_points_outside(Point &p, Point &q, Point &furthest_point,
                                          std::vector<Point> &points){
     std::vector<Point> points_outside;
     
@@ -53,7 +55,8 @@ std::vector<Point> GeneratePointsOutside(Point &p, Point &q, Point &furthest_poi
     return points_outside;
 }
 
-void QuickHullRec(Point &p, Point &q, std::vector<Point> &points,
+
+void quick_hull::convex_hull_rec(Point &p, Point &q, std::vector<Point> &points,
                   std::vector<Point> &convex_hull) {
     size_t num_points = points.size();
 
@@ -61,19 +64,20 @@ void QuickHullRec(Point &p, Point &q, std::vector<Point> &points,
         return;
 
     Line l = generate_line(p, q);
-    Point furthest_point = FurthestPointFromLine(l, points );
+    Point furthest_point = quick_hull::furthest_point_from_line(l, points );
     convex_hull.push_back(furthest_point);
 
     std::vector<Point> part_1 =
-        GeneratePointsOutside(p, q, furthest_point, points );
+        quick_hull::generate_points_outside(p, q, furthest_point, points );
     std::vector<Point> part_2 =
-        GeneratePointsOutside(q, p, furthest_point, points );
+        quick_hull::generate_points_outside(q, p, furthest_point, points );
 
-    QuickHullRec(p, furthest_point, part_1, convex_hull);
-    QuickHullRec(furthest_point, q, part_2, convex_hull);
+	quick_hull::convex_hull_rec(p, furthest_point, part_1, convex_hull);
+	quick_hull::convex_hull_rec(furthest_point, q, part_2, convex_hull);
 }
 
-std::vector<Point> QuickHull(std::vector<Point> &points) {
+
+std::vector<Point> quick_hull::convex_hull(std::vector<Point> &points) {
     size_t num_points = points.size();
     Point highest_point = points[0], lowest_point = points[0];
 
@@ -87,7 +91,7 @@ std::vector<Point> QuickHull(std::vector<Point> &points) {
     }
 
     std::vector<std::vector<Point>> initial_partition =
-        GeneratePartition(lowest_point, highest_point, points);
+        quick_hull::generate_partition(lowest_point, highest_point, points);
 
     std::vector<Point> part_1 = initial_partition[0],
                        part_2 = initial_partition[1];
@@ -96,8 +100,8 @@ std::vector<Point> QuickHull(std::vector<Point> &points) {
     convex_hull.push_back(lowest_point);
     convex_hull.push_back(highest_point);
 
-    QuickHullRec(lowest_point, highest_point, part_1, convex_hull);
-    QuickHullRec(lowest_point, highest_point, part_2, convex_hull);
+	quick_hull::convex_hull_rec(lowest_point, highest_point, part_1, convex_hull);
+	quick_hull::convex_hull_rec(lowest_point, highest_point, part_2, convex_hull);
 
     return convex_hull;
 }

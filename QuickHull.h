@@ -4,18 +4,20 @@
 #include "points.h"
 #include <vector>
 
-Point FurthestPointFromLine(Line &l, std::vector<Point> &points);
+namespace quick_hull {
+Point furthest_point_from_line(Line &l, std::vector<Point> &points);
 
-std::vector<std::vector<Point>> GeneratePartition(Point &p, Point &q,
+std::vector<std::vector<Point>> generate_partition(Point &p, Point &q,
                                                   std::vector<Point> &points);
                                                   
 
-std::vector<Point> GeneratePointsOutside(Point &p, Point &q, Point &furthest_point,
+std::vector<Point> generate_points_outside(Point &p, Point &q, Point &furthest_point,
                                          std::vector<Point> &points);
 
-void QuickHullRec(Point &p, Point &q, std::vector<Point> &points,
+void convex_hull_rec(Point &p, Point &q, std::vector<Point> &points,
                   std::vector<Point> &convex_hull);
 
-std::vector<Point> QuickHull(std::vector<Point> &points);
+std::vector<Point> convex_hull(std::vector<Point> &points);
+}
 
 #endif

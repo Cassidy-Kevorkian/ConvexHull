@@ -26,8 +26,17 @@ int main() {
     // random_hull_testing::testing_process_other_ridge();
 
     // test::generate_tests();
+	
+	test::robust_tests(graham_scan::convex_hull);
+	//test::robust_tests(graham_scan::convex_hull_parallel);
+	//test::robust_tests(quick_hull::convex_hull);
+	//test::robust_tests(quick_hull::convex_hull_parallel);
+	//test::robust_tests(random_hull::convex_hull);
+	//test::robust_tests(random_hull::convex_hull_parallel);
 
-    test::robust_tests(random_hull::convex_hull);
+	//test::check_test("../tests/test_files/square_test_10000.txt","../tests/test_files/square_correction_10000.txt", graham_scann:convex_hull);
+
+    //test::robust_tests(random_hull::convex_hull);
     
     //
     // test::check_test("../tests/test_files/circle_test_100.txt",
