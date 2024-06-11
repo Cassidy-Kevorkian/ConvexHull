@@ -26,7 +26,7 @@ int main() {
      //random_hull_testing::testing_process_other_ridge();
 
  	//test::generate_tests();
-	test::robust_tests(QuickHull);
+	test::robust_tests(graham_scan::convex_hull);
 
 	//test::check_test("../tests/test_files/square_test_10000.txt","../tests/test_files/square_correction_10000.txt", GrahamScan);
 

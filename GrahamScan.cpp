@@ -6,7 +6,7 @@
 #include <stack>
 #include <vector>
 
-void remove_colinear(std::vector<Point> &points, Point ref) {
+void graham_scan::remove_colinear(std::vector<Point> &points, Point ref) {
     std::vector<Point> new_points = {points[0]};
 
     for (size_t i = 1; i < points.size(); ++i) {
@@ -22,7 +22,7 @@ void remove_colinear(std::vector<Point> &points, Point ref) {
     points = new_points;
 }
 
-Point before_top(std::stack<Point> &stack) {
+Point graham_scan::before_top(std::stack<Point> &stack) {
     Point top = stack.top();
     stack.pop();
     Point before_top = stack.top();
@@ -30,7 +30,7 @@ Point before_top(std::stack<Point> &stack) {
     return before_top;
 }
 
-std::vector<Point> GrahamScan(std::vector<Point> &points) {
+std::vector<Point> graham_scan::convex_hull(std::vector<Point> &points) {
     // We first find the point with the least y coordinate, name it P
     Point P = points[0];
     for (auto point : points) {
@@ -58,7 +58,7 @@ std::vector<Point> GrahamScan(std::vector<Point> &points) {
          //   stack.pop();
         //}
         while (stack.size() > 1 &&
-               !is_convex(before_top(stack), stack.top(), point)) {
+               !is_convex(graham_scan::before_top(stack), stack.top(), point)) {
             stack.pop();
         }
         stack.push(point);
