@@ -206,15 +206,12 @@ void test::generate_double_circle_test(int num_points) {
 
         if (M_PI / 2 <= angle && 3 * (M_PI / 2) >= angle) {
             exterior_points.push_back(Point(x, y));
-            exterior_points.push_back(Point(200 - x, y));
+            exterior_points.push_back(Point(300 - x, y));
         }
 
         else {
             interior_points.push_back(Point(x, y));
-
-            if (angle != 0) {
-                interior_points.push_back(Point(200 - x, y));
-            }
+			interior_points.push_back(Point(300 - x, y));
         }
     }
 
@@ -225,7 +222,7 @@ void test::generate_double_circle_test(int num_points) {
         double x = rand_radius * cos(angle);
         double y = rand_radius * sin(angle);
         interior_points.push_back(Point(x, y));
-        interior_points.push_back(Point(200 - x, y));
+        interior_points.push_back(Point(300 - x, y));
     }
 
     // rotation everything with some random angle
