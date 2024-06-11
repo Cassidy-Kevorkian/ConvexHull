@@ -44,9 +44,6 @@ std::vector<Point> graham_scan::convex_hull(std::vector<Point> &points) {
                   return compare_angles(p1, p2, P);
               });
 
-    //  std::cout << P << std::endl;
-
-    //remove_colinear(points, P);
 
     std::stack<Point> stack;
     stack.push(points[0]);
@@ -54,9 +51,7 @@ std::vector<Point> graham_scan::convex_hull(std::vector<Point> &points) {
 
     for (size_t i = 1; i < points.size(); ++i) {
         Point point = points[i];
-        //if (!is_convex(before_top(stack), stack.top(), point)) {
-         //   stack.pop();
-        //}
+
         while (stack.size() > 1 &&
                !is_convex(graham_scan::before_top(stack), stack.top(), point)) {
             stack.pop();
