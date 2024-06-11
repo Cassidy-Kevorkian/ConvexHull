@@ -1,4 +1,3 @@
-// generate n concentric points on a circle and add them in tests.txt
 #include "tests.h"
 #include <GrahamScan.h>
 #include <QuickHull.h>
@@ -15,9 +14,8 @@
 #include <unordered_set>
 #include <vector>
 
-// main takes two parameters n and the type of test
 
-std::vector<int> values_tested = {100,     1000,     10000,   100000,
+std::vector<int> values_tested = {100, 1000,     10000,   100000,
                                   1000000};
 
 void test::run_file(const std::string &file_name) {
@@ -97,56 +95,63 @@ void test::run_file(const std::string &file_name) {
 }
 
 
-void test::run_tests(std::vector<std::string> types,
-                     std::vector<Point> F(std::vector<Point> &)) {
-    for (auto type : types) {
-        for (auto n : values_tested) {
-            std::cout << "Test " << n << " " << type << "\n";
-            test::check_test("../tests/test_" + std::to_string(n) +
-                                 "_" + type + ".txt",
-                             "../tests/correction_" +
-                                 std::to_string(n) + "_" + type +
-                                 ".txt",
-                             F);
+void test::robust_tests(std::vector<Point> F(std::vector<Point> &)) {
+
+        for (int i = 0; i < 5; ++i) {
+
+            std::cout << "Testing against circle_test with " <<  values_tested[i] << " points..." <<  std::endl;
+			test::check_test("../tests/test_files/circle_test_" +
+					std::to_string(values_tested[i]) + ".txt",
+					"../tests/test_files/circle_correction_" +
+					std::to_string(values_tested[i]) + ".txt", F);
+
+			std::cout << "Testing double_circle_test with " <<  values_tested[i] << " points..." <<  std::endl;
+			test::check_test("../tests/test_files/double_circle_test_" +
+					std::to_string(values_tested[i]) + ".txt",
+					"../tests/test_files/double_circle_correction_" +
+					std::to_string(values_tested[i]) + ".txt", F);
+
+			std::cout << "Testing on square_test with " <<  values_tested[i] << " points..." <<  std::endl;
+			test::check_test("../tests/test_files/square_test_" +
+					std::to_string(values_tested[i]) + ".txt",
+					"../tests/test_files/square_correction_" +
+					std::to_string(values_tested[i]) + ".txt", F);
+
+
         }
-    }
+
 }
 
 
 void test::generate_circle_test(
-    int num_points,
-    const std::string &type) { // open a file to write the test cases
+    int num_points) { 
+		double num_boundary_points;
     
-	double num_boundary_points;
+	if(num_points <= 1000) {
+		num_boundary_points = 100;
+	}
 
-    if (type == "few") {
-        num_boundary_points = 10;
-    } else if (type == "average") {
-        num_boundary_points = 100;
-    } else if (type == "many") {
-        num_boundary_points = 1000;
-    } else {
-        std::cerr << "Invalid type" << std::endl;
-        return;
-    }
+	else{
+		num_boundary_points = 1000;
+	}
 
-    std::ofstream file1("../tests/test_files/circle_test_" + std::to_string(num_points) + "_" +
-                        type + ".txt");
-    std::ofstream file2("../tests/test_files/circle_correction_" + std::to_string(num_points) +
-                        "_" + type + ".txt");
-    if (!file1.is_open()) {
-        std::cerr << "Error opening file" << std::endl;
-        return;
-    }
-    if (!file2.is_open()) {
+    std::ofstream test_file("../tests/test_files/circle_test_" + std::to_string(num_points) + ".txt");
+    std::ofstream correction_file("../tests/test_files/circle_correction_" + std::to_string(num_points) + ".txt");
+
+    if (!test_file.is_open()) {
         std::cerr << "Error opening file" << std::endl;
         return;
     }
 
-    file1 << num_points << std::endl;
-    std::vector<Point> points;
+    if (!correction_file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
 
-    file2 << num_boundary_points << std::endl;
+    test_file << num_points << std::endl;
+
+    correction_file << num_boundary_points << std::endl;
+
     double radius = 100.0;
     double x_center = 0.0;
     double y_center = 0.0;
@@ -156,32 +161,191 @@ void test::generate_circle_test(
             x_center + radius * std::cos(2 * M_PI * i / num_boundary_points);
         double y =
             y_center + radius * std::sin(2 * M_PI * i / num_boundary_points);
-        // print points to file
-        file1 << x << " " << y << std::endl;
-        file2 << x << " " << y << std::endl;
-    }
 
-    radius = 80;
+        // print points to file
+        test_file << x << " " << y << std::endl;
+        correction_file << x << " " << y << std::endl;
+    }
 
     for (size_t i = 0; i < num_points - num_boundary_points; ++i) {
         double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
-        double rand_radius = radius * sqrt((double)rand() / RAND_MAX);
+        double rand_radius = (radius - 20) * ((double)rand() / RAND_MAX);
 
         double x = rand_radius * cos(angle);
         double y = rand_radius * sin(angle);
         // print points to file
-        file1 << x << " " << y << std::endl;
+        test_file << x << " " << y << std::endl;
     }
-    file1.close();
-    file2.close();
+    test_file.close();
+    correction_file.close();
 }
 
-void test::generate_tests() {
-    srand(time(0));
-	test::generate_circle_test(1000000, "few");
-	test::generate_circle_test(1000000, "average");
-	test::generate_circle_test(1000000, "many");
+
+void test::generate_double_circle_test(int num_points) { 
+	double num_boundary_points;
+
+   	if(num_points <= 1000) {
+		num_boundary_points = 100;
+	}
+
+	else{
+		num_boundary_points = 1000;
+	}
+
+	std::vector<Point> interior_points, exterior_points;
+
+    double radius = 100.0;
+    double x_center = 0.0;
+    double y_center = 0.0;
+	int count = 0;
+
+    for (size_t i = 0; i < num_boundary_points; ++i) {
+		double angle = 2 * M_PI * (i / num_boundary_points);
+
+        double x = x_center + radius * std::cos(angle);
+        double y = y_center + radius * std::sin(angle);
+		
+
+		
+		if(M_PI / 2 <= angle && 3 * (M_PI / 2) >= angle) {
+			exterior_points.push_back(Point(x, y));
+			exterior_points.push_back(Point(200 - x, y));
+		}
+
+		else{
+			interior_points.push_back(Point(x, y));
+
+			if(angle != 0) {
+				interior_points.push_back(Point(200 - x, y));
+			}
+
+		}
+
+    }
+
+    for (size_t i = 0; i < num_points - num_boundary_points; ++i) {
+        double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+        double rand_radius = (radius - 20) * ((double)rand() / RAND_MAX);
+
+        double x = rand_radius * cos(angle);
+        double y = rand_radius * sin(angle);
+		interior_points.push_back(Point(x, y));
+		interior_points.push_back(Point(200 - x, y));
+    }
+
+	//rotation everything with some random angle
+
+	double rotation_angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+	double c = cos(rotation_angle), s = sin(rotation_angle);
+
+	for(int i = 0; i < interior_points.size(); ++i) {
+		Point p = interior_points[i];
+		interior_points[i] = Point(p.x * c - p.y * s, p.x * s + p.y * c);
+	}
+
+	for(int i = 0; i < exterior_points.size(); ++i) {
+		Point p = exterior_points[i];
+		exterior_points[i] = Point(p.x * c - p.y * s, p.x * s + p.y * c);
+	}
+
+	std::ofstream test_file("../tests/test_files/double_circle_test_" + std::to_string(num_points) + ".txt");
+    std::ofstream correction_file("../tests/test_files/double_circle_correction_" + std::to_string(num_points) + ".txt");
+
+    if (!test_file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
+
+    if (!correction_file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
+
+	test_file << exterior_points.size() + interior_points.size() << std::endl;
+	correction_file << exterior_points.size() << std::endl;
+
+	for(int i = 0; i < interior_points.size(); ++i) {
+		test_file << interior_points[i].x << " " << interior_points[i].y << std::endl;
+	}
+
+	for(int i = 0; i < exterior_points.size(); ++i) {
+		test_file << exterior_points[i].x << " " << exterior_points[i].y << std::endl;
+		correction_file << exterior_points[i].x << " " << exterior_points[i].y << std::endl;
+	}
+ 
+	test_file.close();
+    correction_file.close();
 }
+
+
+void test::generate_square_test(
+    int num_points) { 
+
+    std::ofstream test_file("../tests/test_files/square_test_" + std::to_string(num_points) + ".txt");
+    std::ofstream correction_file("../tests/test_files/square_correction_" + std::to_string(num_points) + ".txt");
+
+    if (!test_file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
+
+    if (!correction_file.is_open()) {
+        std::cerr << "Error opening file" << std::endl;
+        return;
+    }
+
+    test_file << num_points << std::endl;
+
+    correction_file << 4 << std::endl;
+
+    double side_length = 100.0;
+
+	test_file << 0 << " " << 0 << std::endl;
+	correction_file << 0 << " " << 0 << std::endl;
+	test_file << 100 << " " << 0 << std::endl;
+	correction_file << 100 << " " << 0 << std::endl;
+	test_file << 100 << " " << 100 << std::endl;
+	correction_file << 100 << " " << 100 << std::endl;
+	test_file << 0 << " " << 100 << std::endl;
+	correction_file << 0 << " " << 100 << std::endl;
+
+
+	double radius = 40;
+
+    for (size_t i = 0; i < num_points - 4; ++i) {
+        double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
+        double rand_radius = radius * ((double)rand() / RAND_MAX);
+
+        double x = rand_radius * cos(angle);
+        double y = rand_radius * sin(angle);
+        // print points to file
+        test_file << x + 50 << " " << y + 50 << std::endl;
+    }
+
+    test_file.close();
+    correction_file.close();
+}
+
+
+void test::generate_tests() {
+	srand(time(0));
+
+	for(int val : values_tested) {
+		std::cout << "Generating circle_test with " << val << " points...";
+		test::generate_circle_test(val);
+		std::cout << " DONE" << std::endl;
+
+		std::cout << "Generating double_circle_test with " << val << " points...";
+		test::generate_double_circle_test(val);
+		std::cout << " DONE" << std::endl;
+
+		std::cout << "Generating square_test with " << val << " points...";
+		test::generate_square_test(val);
+		std::cout << " DONE" << std::endl;
+	}
+
+}
+
 
 void test::check_test(const std::string &input_test,
                       const std::string &correction,
@@ -230,11 +394,8 @@ void test::check_test(const std::string &input_test,
     std::sort(result.begin(), result.end());
     std::sort(correct_result.begin(), correct_result.end());
 
-    printf("Debugging function compare_tests in tests.cpp\n");
-
     if (result.size() != correct_result.size()) {
         printf("Files do not match\n");
-    }
 
     for (size_t i = 0; i < result.size(); ++i) {
         if (i >= correct_result.size()) {
@@ -248,18 +409,21 @@ void test::check_test(const std::string &input_test,
     printf("%25zu ||  %22zu\n", result.size(), correct_result.size());
     printf("%25s || %22s\n", input_test.c_str(), correction.c_str());
 
+	}
+
     if (result != correct_result) {
-        printf("\nFiles do not match!. Test failed! \n");
+        printf("\n  Files do not match!. Test failed! \n");
     } else {
-        printf("\nFiles do match. Test passed! \n");
+        printf("\n  Files do match. Test passed! \n");
     }
 
-    printf("\nEXECUTION TIME : %9f\n", timer.count());
+    printf("\n  EXECUTION TIME : %9f\n\n\n", timer.count());
 
     // std::cout << "Number of points: " << number_tests << " ";
 
     correct_file.close();
 }
+
 
 void test::compare_files(const std::string &file1,
                          const std::string &file2) {
@@ -311,16 +475,17 @@ void test::compare_files(const std::string &file1,
     }
 
     for (size_t i = 0; i < lines_a.size(); ++i) {
-        printf("(%10f,  %10f) || (%10f, %10f)\n", lines_a[i].first,
-               lines_a[i].second, lines_b[i].first,
-               lines_b[i].second);
-    }
-    printf("%25zu ||  %22zu\n", lines_a.size(), lines_b.size());
-    printf("%25s || %22s", file1.c_str(), file2.c_str());
-    std::cout << "\n";
+				printf("(%10f,  %10f) || (%10f, %10f)\n", lines_a[i].first,
+					   lines_a[i].second, lines_b[i].first,
+					   lines_b[i].second);
+			}
+			printf("%25zu ||  %22zu\n", lines_a.size(), lines_b.size());
+			printf("%25s || %22s", file1.c_str(), file2.c_str());
+			std::cout << "\n";
 
     if (lines_a != lines_b) {
         printf("Files do not match \n");
+		
     } else {
         printf("Files do match \n");
     }
