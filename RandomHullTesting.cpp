@@ -51,6 +51,7 @@ void testing_build_c() {
     std::normal_distribution normal_2(0., 5.);
 
     std::map<random_hull::Edge, std::vector<int>> D;
+    std::mutex D_mtx;
 
     std::vector<random_hull::Edge> edges = {
         {Point(0, 0), Point(1, 0)},
@@ -82,7 +83,7 @@ void testing_build_c() {
     }
 
     for (int i = 0; i < 3; ++i) {
-        random_hull::build_c(edges[i], points[i], D);
+        random_hull::build_c(edges[i], points[i], D, D_mtx);
         assert(D[edges[i]].size() == visible_correction[i].size());
 
         for (int j = 0; j < D[edges[i]].size(); ++j) {
@@ -170,11 +171,12 @@ void testing_merge_sets() {
 
      C_test[AB] = set_AB;
      C_test[BC] = set_BC;
+     std::mutex C_test_mtx;
 
      //random_hull::build_c(AB, points, C_test);
      //random_hull::build_c(BC, points, C_test);
 
-    random_hull::merge_sets(C_test, AB, BC, PB, points);
+    random_hull::merge_sets(AB, BC, PB, C_test, C_test_mtx, points);
 
      //std::cout << C_test[PB].size() << "\n";
      //std::cout << set_BC.size() << "\n";

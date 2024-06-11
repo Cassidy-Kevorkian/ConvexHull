@@ -8,17 +8,13 @@
 #include <utility>
 #include <vector>
 
-std::atomic<int> cur_threads;
-std::map<random_hull::Edge, std::vector<int>> C;
-std::mutex C_mtx;
-
-std::set<random_hull::Edge> H;
-std::mutex H_mtx;
-
-random_hull::multimap<Point, random_hull::Edge> M;
-
 std::set<random_hull::Edge>
-random_hull::__convex_hull(const std::vector<Point> &points) {
+random_hull::__convex_hull(convex_hull_parameters *const parameters) {
+
+    const auto &points = parameters->points;
+    auto &C = parameters->C;
+    auto &C_mtx = parameters->C_mtx;
+
     if (points.size() <= 3)
         return {};
 
@@ -43,37 +39,44 @@ random_hull::__convex_hull(const std::vector<Point> &points) {
     }
 
     for (auto &edge : edges) {
-        H.insert(edge);
+        parameters->H.insert(edge);
     }
 
     std::vector<std::thread> workers(3);
 
     for (int i = 0; i < 3; ++i) {
-        workers[i] = std::thread(&random_hull::build_c, std::ref(edges[i]),
-                                 std::cref(points), std::ref(C));
+        workers[i] =
+            std::thread(&random_hull::build_c, std::ref(edges[i]),
+                        std::cref(points), std::ref(C), std::ref(C_mtx));
     }
 
     for (auto &w : workers) {
         w.join();
     }
 
-    cur_threads.fetch_add(3);
+    parameters->cur_threads.fetch_add(3);
 
     for (int i = 0; i < 3; ++i) {
         workers[i] =
             std::thread(random_hull::process_ridge, std::cref(edges[i]),
                         std::cref(points[(i + 1) % 3]),
-                        std::cref(edges[(i + 1) % 3]), std::cref(points));
+                        std::cref(edges[(i + 1) % 3]), parameters);
     }
 
     for (int i = 0; i < 3; ++i) {
         workers[i].join();
     }
-    return H;
+
+    return parameters->H;
 }
 
-std::set<random_hull::Edge>
-random_hull::__convex_hull__sequential(const std::vector<Point> &points) {
+std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
+    convex_hull_parameters *const parameters) {
+    const auto &points = parameters->points;
+    auto &C = parameters->C;
+    auto &C_mtx = parameters->C_mtx;
+    auto &H = parameters->H;
+
     if (points.size() <= 3)
         return {};
 
@@ -105,19 +108,35 @@ random_hull::__convex_hull__sequential(const std::vector<Point> &points) {
     // std::vector<std::thread> workers(3);
 
     for (int i = 0; i < 3; ++i) {
-        build_c(edges[i], points, C);
+        build_c(edges[i], points, C, C_mtx);
     }
 
+     //std::cout << C[edges[1]].size() << "\n";
+     //std::cout << C[edges[0]].size() << "\n";
+     //std::cout << C[edges[2]].size() << "\n";
+ //
     for (int i = 0; i < 3; ++i) {
+        //std::cout << get_min(C[edges[i]]) << "\n";
         process_ridge_sequential(edges[i], points[(i + 1) % 3],
-                                 edges[(i + 1) % 3], points);
+                                 edges[(i + 1) % 3], parameters);
     }
-    return H;
+
+    return parameters->H;
 }
 
 std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
 
-    random_hull ::__convex_hull__sequential(points);
+    std::atomic<int> cur_threads(0);
+    std::map<random_hull::Edge, std::vector<int>> C;
+    std::mutex C_mtx;
+
+    std::set<random_hull::Edge> H;
+    std::mutex H_mtx;
+
+    random_hull::multimap<Point, random_hull::Edge> M(10000000);
+    convex_hull_parameters parameters(1, H, H_mtx, C, C_mtx, M, points);
+
+    random_hull ::__convex_hull__sequential(&parameters);
 
     std::unordered_set<Point> hash_set;
 
@@ -134,30 +153,41 @@ std::vector<Point> random_hull::convex_hull(std::vector<Point> &points) {
 
     return result;
 }
+
 std::vector<Point>
 random_hull::convex_hull_parallel(std::vector<Point> &points) {
+    std::atomic<int> cur_threads;
+    std::map<random_hull::Edge, std::vector<int>> C;
+    std::mutex C_mtx;
 
-    random_hull ::__convex_hull(points);
+    std::set<random_hull::Edge> H;
+    std::mutex H_mtx;
 
-     std::unordered_set<Point> hash_set;
- 
-     for (const auto &x : H) {
-         // std::cout << x.first << " " << x.second << "\n";
-         hash_set.insert(x.first);
-         hash_set.insert(x.second);
-     }
- 
-     std::vector<Point> result;
- 
-     for (const auto &iter : hash_set) {
-         result.push_back(iter);
-     }
- 
-     return result;
+    random_hull::multimap<Point, random_hull::Edge> M(points.size());
+    convex_hull_parameters parameters(1, H, H_mtx, C, C_mtx, M, points);
+
+    random_hull ::__convex_hull(&parameters);
+
+    std::unordered_set<Point> hash_set;
+
+    for (const auto &x : H) {
+        // std::cout << x.first << " " << x.second << "\n";
+        hash_set.insert(x.first);
+        hash_set.insert(x.second);
+    }
+
+    std::vector<Point> result;
+
+    for (const auto &iter : hash_set) {
+        result.push_back(iter);
+    }
+
+    return result;
 }
 
 void random_hull::build_c(Edge &t, const std::vector<Point> &points,
-                          std::map<random_hull::Edge, std::vector<int>> &C) {
+                          std::map<random_hull::Edge, std::vector<int>> &C,
+                          std::mutex &C_mtx) {
 
     std::vector<int> numbers;
 
@@ -169,6 +199,7 @@ void random_hull::build_c(Edge &t, const std::vector<Point> &points,
     }
 
     std::lock_guard<std::mutex> lk(C_mtx);
+    //std::cout << numbers.size() << "";
     C[t] = std::move(numbers);
 }
 
@@ -194,13 +225,23 @@ random_hull::Edge random_hull::join(const Point &p, const Point &r,
     return Edge(r, p);
 }
 
-void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
-                                           const Edge &t2,
-                                           const std::vector<Point> &points) {
+void random_hull::process_ridge_sequential(
+    const Edge &t1, const Point &r, const Edge &t2,
+    convex_hull_parameters *const parameters) {
     // std::cout << r << "\n";
+    //std::cout <<  r <<"\n";
+    //std::cout << "A" << "\n";
 
-    if (get_min(C[t1]) == max_size && get_min(C[t2]) == max_size)
+    auto &C = parameters->C;
+    auto &C_mtx = parameters->C_mtx;
+    auto &H = parameters->H;
+    auto &H_mtx = parameters->H_mtx;
+    auto &points = parameters->points;
+
+    if (get_min(C[t1]) == max_size && get_min(C[t2]) == max_size) {
+        //std::cout << "1\n";
         return;
+    }
     if (get_min(C[t1]) == get_min(C[t2])) {
         std::lock_guard<std::mutex> lk(H_mtx);
         H.erase(t1);
@@ -209,11 +250,16 @@ void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
     }
 
     if (get_min(C[t2]) < get_min(C[t1])) {
-        process_ridge_sequential(t2, r, t1, points);
+        process_ridge_sequential(t2, r, t1, parameters);
         return;
     }
 
     size_t index = get_min(C[t1]);
+    //std::cout << H.size() << "\n";
+    //for(const auto &t : H) {
+        ////std::cout << t << "\n";
+    //}
+    //std::cout << index << " Muie\n";
 
     // std::cout << index << " ";
     //  Point p = points[index];
@@ -221,12 +267,17 @@ void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
 
     Edge t = join(p, r, t1);
 
-    merge_sets(C, t1, t2, t, points);
+    merge_sets(t1, t2, t, C, C_mtx, points);
+
+    //std::cout << C[t].size() << "\n";
+    //std::cout << get_min(C[t]) << "\n";
 
     // std::cout << C[t].size() << "\n";
 
+    //H_mtx.lock();
     H.erase(t1);
     H.insert(t);
+    //H_mtx.unlock();
 
     Point r1 = t.first, r2 = t.second;
 
@@ -234,13 +285,20 @@ void random_hull::process_ridge_sequential(const Edge &t1, const Point &r,
         std::swap(r1, r2);
 
     // std::thread worker1, worker2;
-    process_ridge_sequential(t, r1, t2, points);
-
-    process_other_ridge_sequential(r2, t, points);
+    process_ridge_sequential(t, r1, t2, parameters);
+    process_other_ridge_sequential(r2, t, parameters);
+    //std::cout << "Here\n";
 }
 
 void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
-                                const std::vector<Point> &points) {
+                                convex_hull_parameters *const parameters) {
+    auto &C = parameters->C;
+    auto &C_mtx = parameters->C_mtx;
+    auto &H = parameters->H;
+    auto &H_mtx = parameters->H_mtx;
+    auto &points = parameters->points;
+    auto &cur_threads = parameters->cur_threads;
+
     if (get_min(C[t1]) == max_size && get_min(C[t2]) == max_size)
         return;
 
@@ -254,7 +312,7 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     }
 
     if (get_min(C[t2]) < get_min(C[t1])) {
-        process_ridge(t2, r, t1, points);
+        process_ridge(t2, r, t1, parameters);
 
         return;
     }
@@ -265,7 +323,7 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     const Point &p = points[index];
 
     Edge t = join(r, p, t1);
-    merge_sets(C, t1, t2, t, points);
+    merge_sets(t1, t2, t, C, C_mtx, points);
 
     std::unique_lock<std::mutex> uq_lk(H_mtx);
     H.erase(t1);
@@ -280,23 +338,23 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     bool a = false, b = false;
     if (cur_threads.load() < NUM_THREADS) {
         worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r1),
-                              std::cref(t2), std::cref(points));
+                              std::cref(t2), parameters);
         cur_threads.fetch_add(1);
         a = true;
     } else {
 
-        process_ridge_sequential(t, r1, t2, points);
+        process_ridge_sequential(t, r1, t2, parameters);
     }
 
     if (cur_threads.load() < NUM_THREADS) {
         worker2 = std::thread(&process_other_ridge, std::cref(r2), std::cref(t),
-                              std::cref(points));
+                              parameters);
         cur_threads.fetch_add(1);
         b = true;
 
     } else {
 
-        process_other_ridge_sequential(r2, t, points);
+        process_other_ridge_sequential(r2, t, parameters);
     }
     if (a) {
         worker1.join();
@@ -308,19 +366,25 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     }
 }
 
-void random_hull::process_other_ridge(const Point &r1, const Edge &t,
-                                      const std::vector<Point> &points) {
+void random_hull::process_other_ridge(
+    const Point &r1, const Edge &t, convex_hull_parameters *const parameters) {
+    auto &M = parameters->M;
+    auto &points = parameters->points;
     if (!M.insert_and_set(r1, t)) {
         const Edge &t1 = M.get_value(r1, t);
-        process_ridge(t, r1, t1, points);
+        process_ridge(t, r1, t1, parameters);
     }
 }
 
 void random_hull::process_other_ridge_sequential(
-    const Point &r1, const Edge &t, const std::vector<Point> &points) {
+    const Point &r1, const Edge &t, convex_hull_parameters *const parameters) {
+    auto &M = parameters->M;
+    auto &points = parameters->points;
+    //std::cout << "B" << "\n";
+    //std::cout << t.first << " " << t.second << "\n";
     if (!M.insert_and_set(r1, t)) {
         const Edge &t1 = M.get_value(r1, t);
-        process_ridge_sequential(t, r1, t1, points);
+        process_ridge_sequential(t, r1, t1, parameters);
     }
 }
 
@@ -332,11 +396,11 @@ size_t random_hull::get_min(const std::vector<int> &points_set) {
     return points_set[0];
 }
 
-void random_hull::merge_sets(std::map<random_hull::Edge, std::vector<int>> &C,
-                             const random_hull::Edge &t1,
+void random_hull::merge_sets(const random_hull::Edge &t1,
                              const random_hull::Edge &t2,
                              const random_hull::Edge &t,
-                             const std::vector<Point> &points) {
+                             std::map<random_hull::Edge, std::vector<int>> &C,
+                             std::mutex &C_mtx, std::vector<Point> &points) {
 
     const auto &set1 = C[t1];
     const auto &set2 = C[t2];

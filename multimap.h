@@ -46,6 +46,7 @@ template <typename Key, typename Tp> class multimap {
 };
 template <typename Key, typename Tp>
 bool multimap<Key, Tp>::insert_and_set(const Key &key, const Tp &value) {
+  
     bool expect = false;
 
     size_t entry = get_entry(key);
@@ -53,6 +54,7 @@ bool multimap<Key, Tp>::insert_and_set(const Key &key, const Tp &value) {
     bool ret_value = true;
 
     while (!__table[entry].taken.compare_exchange_strong(expect, true)) {
+      //std::cout << "C";
 
         if (__table[entry].get_key() == key) {
             ret_value = false;

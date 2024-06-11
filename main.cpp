@@ -16,20 +16,26 @@
 
 int main() {
 
-     //random_hull_testing::testing_suite_multimap();
-     //random_hull_testing::testing_convex_hull();
-     //random_hull_testing::testing_is_visible();
-     //random_hull_testing::testing_build_c();
-     //random_hull_testing::testing_process_ridge();
-     //random_hull_testing::testing_merge_sets();
-  	//random_hull_testing::testing_join();
-     //random_hull_testing::testing_process_other_ridge();
+    // random_hull_testing::testing_suite_multimap();
+    // random_hull_testing::testing_convex_hull();
+    // random_hull_testing::testing_is_visible();
+    // random_hull_testing::testing_build_c();
+    // random_hull_testing::testing_process_ridge();
+    // random_hull_testing::testing_merge_sets();
+    // random_hull_testing::testing_join();
+    // random_hull_testing::testing_process_other_ridge();
 
- 	//test::generate_tests();
-	test::robust_tests(QuickHull);
+    // test::generate_tests();
 
-	//test::check_test("../tests/test_files/square_test_10000.txt","../tests/test_files/square_correction_10000.txt", GrahamScan);
-
+    test::robust_tests(random_hull::convex_hull);
+    
+    //
+    // test::check_test("../tests/test_files/circle_test_100.txt",
+    //"../tests/test_files/circle_correction_100.txt",
+    // random_hull::convex_hull);
+    // test::check_test("../tests/test_files/circle_test_10000.txt",
+    //"../tests/test_files/circle_correction_10000.txt",
+    // random_hull::convex_hull);
 
     // test::check_test("../tests/test_muie_2.txt",
     //"../tests/correction_muie_2.txt",
