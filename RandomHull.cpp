@@ -11,6 +11,9 @@
 #include <utility>
 #include <vector>
 
+
+int NUM_THREADS = 20;
+
 std::set<random_hull::Edge>
 random_hull::__convex_hull(convex_hull_parameters *const parameters) {
 
@@ -75,6 +78,7 @@ random_hull::__convex_hull(convex_hull_parameters *const parameters) {
 
 std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
     convex_hull_parameters *const parameters) {
+	NUM_THREADS = 1;
     const auto &points = parameters->points;
     auto &C = parameters->C;
     auto &C_mtx = parameters->C_mtx;
