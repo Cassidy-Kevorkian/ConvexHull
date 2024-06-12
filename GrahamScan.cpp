@@ -44,7 +44,6 @@ std::vector<Point> graham_scan::convex_hull(std::vector<Point> &points) {
                   return compare_angles(p1, p2, P);
               });
 
-
     std::stack<Point> stack;
     stack.push(points[0]);
     stack.push(points[1]);

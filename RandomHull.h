@@ -6,7 +6,7 @@
 #include <points.h>
 #include <set>
 #include <vector>
-#define NUM_THREADS 20
+#define NUM_THREADS 1
 constexpr size_t max_size = std::numeric_limits<size_t>::max();
 namespace random_hull {
 typedef std::pair<Point, Point> Edge;
