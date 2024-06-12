@@ -6,29 +6,31 @@
 #include <points.h>
 #include <set>
 #include <vector>
-#define NUM_THREADS 16
+#define NUM_THREADS 20
 constexpr size_t max_size = std::numeric_limits<size_t>::max();
 namespace random_hull {
 typedef std::pair<Point, Point> Edge;
 
 struct convex_hull_parameters {
 
-    std::atomic<int> cur_threads;
+    int cur_threads;
     std::set<random_hull::Edge> &H;
     std::mutex &H_mtx;
     std::map<random_hull::Edge, std::vector<int>> &C;
     std::mutex &C_mtx;
     random_hull::multimap<Point, random_hull::Edge> &M;
     std::vector<Point> &points;
+    std::recursive_mutex &thread_lock;
 
     convex_hull_parameters(int cur_threads, std::set<random_hull::Edge> &H,
                            std::mutex &H_mtx,
                            std::map<random_hull::Edge, std::vector<int>> &C,
                            std::mutex &C_mtx,
                            random_hull::multimap<Point, random_hull::Edge> &M,
-                           std::vector<Point> &points)
+                           std::vector<Point> &points,
+                           std::recursive_mutex &thread_lock)
         : cur_threads(cur_threads), H(H), H_mtx(H_mtx), C(C), C_mtx(C_mtx),
-          M(M), points(points) {}
+          M(M), points(points), thread_lock(thread_lock) {}
 };
 
 std::vector<Point> convex_hull(std::vector<Point> &points);

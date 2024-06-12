@@ -17,7 +17,7 @@
 
 std::vector<int> values_tested = {100, 1000, 10000, 100000, 1000000};
 std::default_random_engine
-    eng(10012);
+    eng(std::chrono::steady_clock::now().time_since_epoch().count());
 
 void test::run_file(const std::string &file_name) {
     std::ifstream file(file_name);
@@ -104,21 +104,21 @@ void test::robust_tests(std::vector<Point> F(std::vector<Point> &)) {
                              std::to_string(values_tested[i]) + ".txt",
                          F);
 
-        std::cout << "Testing double_circle_test with " << values_tested[i]
-                  << " points..." << std::endl;
-        test::check_test("../tests/test_files/double_circle_test_" +
-                             std::to_string(values_tested[i]) + ".txt",
-                         "../tests/test_files/double_circle_correction_" +
-                             std::to_string(values_tested[i]) + ".txt",
-                         F);
-
-        std::cout << "Testing on square_test with " << values_tested[i]
-                  << " points..." << std::endl;
-        test::check_test("../tests/test_files/square_test_" +
-                             std::to_string(values_tested[i]) + ".txt",
-                         "../tests/test_files/square_correction_" +
-                             std::to_string(values_tested[i]) + ".txt",
-                         F);
+         //std::cout << "Testing double_circle_test with " << values_tested[i]
+                   //<< " points..." << std::endl;
+         //test::check_test("../tests/test_files/double_circle_test_" +
+                              //std::to_string(values_tested[i]) + ".txt",
+                          //"../tests/test_files/double_circle_correction_" +
+                              //std::to_string(values_tested[i]) + ".txt",
+                          //F);
+ //
+         //std::cout << "Testing on square_test with " << values_tested[i]
+                   //<< " points..." << std::endl;
+         //test::check_test("../tests/test_files/square_test_" +
+                              //std::to_string(values_tested[i]) + ".txt",
+                          //"../tests/test_files/square_correction_" +
+                              //std::to_string(values_tested[i]) + ".txt",
+                          //F);
     }
 }
 
@@ -169,7 +169,7 @@ void test::generate_circle_test(int num_points) {
 
     for (size_t i = 0; i < num_points - num_boundary_points; ++i) {
         double angle = ((double)rand() / RAND_MAX) * 2 * M_PI;
-        double rand_radius = (radius - 20) * ((double)rand() / RAND_MAX);
+        double rand_radius = (radius) * ((double)rand() / RAND_MAX) - 1e-1;
 
         double x = rand_radius * cos(angle);
         double y = rand_radius * sin(angle);

@@ -25,25 +25,25 @@ int main() {
     // random_hull_testing::testing_join();
     // random_hull_testing::testing_process_other_ridge();
 
-     //test::generate_tests();
-	
-	//test::robust_tests(graham_scan::convex_hull);
-	test::robust_tests(graham_scan::convex_hull_parallel);
-	//test::robust_tests(quick_hull::convex_hull_parallel);
-	//test::robust_tests(quick_hull::convex_hull_parallel);
-	//test::robust_tests(random_hull::convex_hull);
-	//test::robust_tests(random_hull::convex_hull_parallel);
+    //test::generate_tests();
 
-	//test::check_test("../tests/test_files/double_circle_test_10000.txt","../tests/test_files/double_circle_correction_10000.txt", random_hull::convex_hull);
+    // test::robust_tests(graham_scan::convex_hull);
+    // test::robust_tests(graham_scan::convex_hull_parallel);
+     ///test::robust_tests(quick_hull::convex_hull);
+test::robust_tests(random_hull::convex_hull_parallel);
+    // test::robust_tests(quick_hull::convex_hull_parallel);
+    // test::robust_tesgraham_scan::convex_hull_parallellel);
+     //test::robust_tests(graham_scan::convex_hull);
+     //test::robust_tests(graham_scan::convex_hull_parallel);
 
-    
     //
-    // test::check_test("../tests/test_files/circle_test_100.txt",
-    //"../tests/test_files/circle_correction_100.txt",
-    // random_hull::convex_hull);
-    // test::check_test("../tests/test_files/circle_test_10000.txt",
-    //"../tests/test_files/circle_correction_10000.txt",
-    // random_hull::convex_hull);
+      //test::check_test("../tests/test_files/circle_test_1000.txt",
+     //"../tests/test_files/circle_correction_1000.txt",
+      //random_hull::convex_hull_parallel);
+
+     //test::check_test("../tests/test_files/square_test_1000000.txt",
+                      //"../tests/test_files/square_correction_1000000.txt",
+                      //random_hull::convex_hull_parallel);
 
     // test::check_test("../tests/test_muie_2.txt",
     //"../tests/correction_muie_2.txt",
