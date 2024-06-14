@@ -16,11 +16,11 @@
 
 int main() {
 
-    //test::generate_tests();
+	//test::generate_tests();
 	
 	//test::robust_tests(quick_hull::convex_hull);
 	//test::robust_tests(quick_hull::convex_hull_parallel);
-	test::robust_tests(graham_scan::convex_hull);
+	//test::robust_tests(graham_scan::convex_hull);
 	//test::robust_tests(graham_scan::convex_hull_parallel);
 	//test::robust_tests(random_hull::convex_hull);
 	//test::robust_tests(random_hull::convex_hull_parallel);
