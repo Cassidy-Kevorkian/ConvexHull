@@ -105,13 +105,13 @@ void test::robust_tests(std::vector<Point> F(std::vector<Point> &)) {
                              std::to_string(values_tested[i]) + ".txt",
                          F);
 
-        //std::cout << "Testing double_circle_test with " << values_tested[i]
-                  //<< " points..." << std::endl;
-        //test::check_test("../tests/test_files/double_circle_test_" +
-                             //std::to_string(values_tested[i]) + ".txt",
-                         //"../tests/test_files/double_circle_correction_" +
-                             //std::to_string(values_tested[i]) + ".txt",
-                         //F);
+        std::cout << "Testing double_circle_test with " << values_tested[i]
+                  << " points..." << std::endl;
+        test::check_test("../tests/test_files/double_circle_test_" +
+                             std::to_string(values_tested[i]) + ".txt",
+                         "../tests/test_files/double_circle_correction_" +
+                             std::to_string(values_tested[i]) + ".txt",
+                         F);
 
         std::cout << "Testing on square_test with " << values_tested[i]
                   << " points..." << std::endl;
@@ -367,10 +367,22 @@ void test::check_test(const std::string &input_test,
     input_file.close();
 
     std::shuffle(test_points.begin(), test_points.end(), eng);
-    auto start = std::chrono::steady_clock::now();
-    std::vector<Point> result = F(test_points);
-    auto end = std::chrono::steady_clock::now();
-    std::chrono::duration<double> timer = end - start;
+
+    double time = 0.;
+
+    std::vector<Point> result;
+
+    if (F == random_hull::convex_hull_parallel ||
+        F == random_hull::convex_hull) {
+        time = time_function(F, test_points);
+        result = F(test_points);
+    } else {
+        auto start = std::chrono::steady_clock::now();
+        result = F(test_points);
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> timer = end - start;
+        time = timer.count();
+    }
 
     std::vector<Point> correct_result;
     if (!correct_file.is_open()) {
@@ -408,11 +420,35 @@ void test::check_test(const std::string &input_test,
         printf("\n  Files do match. Test passed! \n");
     }
 
-    printf("\n  EXECUTION TIME : %9f\n\n\n", timer.count());
+    printf("\n  EXECUTION TIME : %9f\n\n\n", time);
 
     // std::cout << "Number of points: " << number_tests << " ";
 
     correct_file.close();
+}
+
+double test::time_function(std::vector<Point> (*F)(std::vector<Point> &),
+                           std::vector<Point> &points) {
+
+    std::vector<double> results(40);
+    for (size_t i = 0; i < 40; ++i) {
+
+        auto start = std::chrono::steady_clock::now();
+        F(points);
+        auto end = std::chrono::steady_clock::now();
+        std::chrono::duration<double> timer = end - start;
+        results[i] = (timer).count();
+    }
+
+    std::sort(results.begin(), results.end());
+
+    double sum = 0.;
+    size_t discard_count = 5;
+    for (size_t i = discard_count; i < results.size() - discard_count; ++i) {
+        sum += results[i];
+    }
+
+    return sum / (results.size() - 2 * discard_count);
 }
 
 void test::compare_files(const std::string &file1, const std::string &file2) {

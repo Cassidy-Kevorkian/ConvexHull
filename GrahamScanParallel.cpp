@@ -109,7 +109,7 @@ void graham_scan::find_min_thread(std::vector<Point> &points, const int start,
 
 std::vector<Point>
 graham_scan::convex_hull_parallel(std::vector<Point> &points) {
-    int NPROC = 10;
+    int NPROC = 20;
     // Point P = points[0];
     int num_points = points.size();
 

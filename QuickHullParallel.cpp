@@ -6,7 +6,7 @@
 #include <vector>
 
 std::mutex lock;
-int nr_proc = 40;
+int nr_proc = 20;
 
 void quick_hull::furthest_point_from_line_parallel(const Line &l,
                                                    std::vector<Point> &points,

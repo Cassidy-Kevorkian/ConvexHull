@@ -1,7 +1,7 @@
 [ -d build_directory ] || mkdir build_directory && cd build_directory
 
-cmake ..
-cmake --build . --parallel $(nproc)
+cmake .. &> /dev/null
+cmake --build . --parallel $(nproc) &> /dev/null
 
 ./convex_hull
 
