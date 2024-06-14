@@ -16,6 +16,8 @@
 
 int main() {
 
+    // test::generate_tests();
+
     // random_hull_testing::testing_suite_multimap();
     // random_hull_testing::testing_convex_hull();
     // random_hull_testing::testing_is_visible();
@@ -25,15 +27,10 @@ int main() {
     // random_hull_testing::testing_join();
     // random_hull_testing::testing_process_other_ridge();
 
-    // test::generate_tests();
 
-     test::robust_tests(graham_scan::convex_hull);
-     //test::robust_tests(graham_scan::convex_hull_parallel);
 
-    /// test::robust_tests(quick_hull::convex_hull);
-    // test::robust_tests(quick_hull::convex_hull_parallel);
 
-    //test::robust_tests(random_hull::convex_hull_parallel);
+    
 
 
     return 0;
