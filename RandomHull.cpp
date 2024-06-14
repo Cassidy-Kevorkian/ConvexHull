@@ -12,7 +12,7 @@
 #include <vector>
 
 
-int NUM_THREADS = 20;
+//int NUM_THREADS = 20
 
 std::set<random_hull::Edge>
 random_hull::__convex_hull(convex_hull_parameters *const parameters) {
@@ -78,7 +78,6 @@ random_hull::__convex_hull(convex_hull_parameters *const parameters) {
 
 std::set<random_hull::Edge> random_hull::__convex_hull__sequential(
     convex_hull_parameters *const parameters) {
-	NUM_THREADS = 1;
     const auto &points = parameters->points;
     auto &C = parameters->C;
     auto &C_mtx = parameters->C_mtx;
@@ -392,7 +391,9 @@ void random_hull::process_ridge(const Edge &t1, const Point &r, const Edge &t2,
     std::thread worker1, worker2;
     bool work1 = false, work2 = false;
     // if (cur_threads.load() < NUM_THREADS) {
-    int val = NUM_THREADS;
+
+    //int val = NUM_THREADS;
+
     parameters->thread_lock.lock();
     if (cur_threads < NUM_THREADS) {
         worker1 = std::thread(&process_ridge, std::cref(t), std::cref(r1),

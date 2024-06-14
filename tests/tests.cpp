@@ -16,7 +16,7 @@
 #include <vector>
 
 std::vector<int> values_tested = {100, 1000, 10000, 100000, 1000000};
-    // eng(std::chrono::steady_clock::now().time_since_epoch().count());
+// eng(std::chrono::steady_clock::now().time_since_epoch().count());
 static std::default_random_engine
     eng(std::chrono::steady_clock::now().time_since_epoch().count());
 
@@ -105,42 +105,22 @@ void test::robust_tests(std::vector<Point> F(std::vector<Point> &)) {
                              std::to_string(values_tested[i]) + ".txt",
                          F);
 
-<<<<<<< HEAD
-        // std::cout << "Testing double_circle_test with " << values_tested[i]
-        //<< " points..." << std::endl;
-        // test::check_test("../tests/test_files/double_circle_test_" +
-        // std::to_string(values_tested[i]) + ".txt",
-        //"../tests/test_files/double_circle_correction_" +
-        // std::to_string(values_tested[i]) + ".txt",
-        // F);
-        //
-        // std::cout << "Testing on square_test with " << values_tested[i]
-        //<< " points..." << std::endl;
-        // test::check_test("../tests/test_files/square_test_" +
-        // std::to_string(values_tested[i]) + ".txt",
-        //"../tests/test_files/square_correction_" +
-        // std::to_string(values_tested[i]) + ".txt",
-        // F);
+        //std::cout << "Testing double_circle_test with " << values_tested[i]
+                  //<< " points..." << std::endl;
+        //test::check_test("../tests/test_files/double_circle_test_" +
+                             //std::to_string(values_tested[i]) + ".txt",
+                         //"../tests/test_files/double_circle_correction_" +
+                             //std::to_string(values_tested[i]) + ".txt",
+                         //F);
+
+        std::cout << "Testing on square_test with " << values_tested[i]
+                  << " points..." << std::endl;
+        test::check_test("../tests/test_files/square_test_" +
+                             std::to_string(values_tested[i]) + ".txt",
+                         "../tests/test_files/square_correction_" +
+                             std::to_string(values_tested[i]) + ".txt",
+                         F);
     }
-=======
-         //std::cout << "Testing double_circle_test with " << values_tested[i]
-                   //<< " points..." << std::endl;
-         //test::check_test("../tests/test_files/double_circle_test_" +
-                              //std::to_string(values_tested[i]) + ".txt",
-                          //"../tests/test_files/double_circle_correction_" +
-                              //std::to_string(values_tested[i]) + ".txt",
-                          //F);
-						  
-         std::cout << "Testing on square_test with " << values_tested[i] << " points..." << std::endl;
-		 test::check_test("../tests/test_files/square_test_" +
-                              std::to_string(values_tested[i]) + ".txt",
-                          "../tests/test_files/square_correction_" +
-                              std::to_string(values_tested[i]) + ".txt",
-                          F);
-						  
-	
-	}
->>>>>>> d0a0b2789aabe1edbaac118f3f387cbdbd84c446
 }
 
 void test::generate_circle_test(int num_points) {
@@ -297,9 +277,9 @@ void test::generate_double_circle_test(int num_points) {
 }
 
 void test::generate_square_test(int num_points) {
-	double epsilon = 1e-2;
+    double epsilon = 1e-2;
 
-	std::uniform_real_distribution unif(epsilon, 100 - epsilon);
+    std::uniform_real_distribution unif(epsilon, 100 - epsilon);
 
     std::ofstream test_file("../tests/test_files/square_test_" +
                             std::to_string(num_points) + ".txt");
@@ -317,11 +297,11 @@ void test::generate_square_test(int num_points) {
     }
 
     test_file << num_points << std::endl;
-							
+
     correction_file << 4 << std::endl;
-							
+
     double side_length = 100.0;
-								
+
     test_file << 0 << " " << 0 << std::endl;
     correction_file << 0 << " " << 0 << std::endl;
     test_file << 100 << " " << 0 << std::endl;
@@ -330,7 +310,7 @@ void test::generate_square_test(int num_points) {
     correction_file << 100 << " " << 100 << std::endl;
     test_file << 0 << " " << 100 << std::endl;
     correction_file << 0 << " " << 100 << std::endl;
-								
+
     double radius = 40;
 
     for (size_t i = 0; i < num_points - 4; ++i) {
