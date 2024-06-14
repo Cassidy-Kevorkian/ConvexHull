@@ -1,7 +1,7 @@
-### Convex Hull
+# Convex Hull Sequential and Parallel
 
 **Overview:**
-The Convex Hull project provides implementations of various algorithms for computing the convex hull of a set of points. The convex hull is a fundamental geometric concept widely used in computational geometry and related fields.
+The Convex Hull Sequential and Parallel project provides implementations of various algorithms for computing the convex hull of a set of points sequentially and in parallel. The convex hull is a fundamental geometric concept widely used in computational geometry and related fields. This project explores different sequential and parallel implementations, aiming to optimize and compare their performance.
 
 **Features:**
 - **Algorithms:** Includes implementations of several convex hull algorithms such as QuickHull, Graham Scan, and Randomized Hull.
