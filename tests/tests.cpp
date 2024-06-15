@@ -420,7 +420,7 @@ void test::check_test(const std::string &input_test,
         printf("\n  Files do match. Test passed! \n");
     }
 
-    printf("\n  EXECUTION TIME : %9f\n\n\n", time);
+    printf("\n  AVERAGE EXECUTION TIME : %9f\n\n\n", time);
 
     // std::cout << "Number of points: " << number_tests << " ";
 
@@ -450,6 +450,7 @@ double test::time_function(std::vector<Point> (*F)(std::vector<Point> &),
 
     return sum / (results.size() - 2 * discard_count);
 }
+
 
 void test::compare_files(const std::string &file1, const std::string &file2) {
     std::ifstream file_a(file1), file_b(file2);
