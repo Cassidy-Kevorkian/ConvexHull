@@ -1,0 +1,105 @@
+Testing against circle_test with 100 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.003797
+
+
+Testing double_circle_test with 100 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.002673
+
+
+Testing on square_test with 100 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.002821
+
+
+Testing against circle_test with 1000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.002686
+
+
+Testing double_circle_test with 1000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.003173
+
+
+Testing on square_test with 1000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.002777
+
+
+Testing against circle_test with 10000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.004563
+
+
+Testing double_circle_test with 10000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.005982
+
+
+Testing on square_test with 10000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.004165
+
+
+Testing against circle_test with 100000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.021855
+
+
+Testing double_circle_test with 100000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.039838
+
+
+Testing on square_test with 100000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.021738
+
+
+Testing against circle_test with 1000000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.195579
+
+
+Testing double_circle_test with 1000000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.403169
+
+
+Testing on square_test with 1000000 points...
+
+  Files do match. Test passed! 
+
+  EXECUTION TIME :  0.194246
+
+

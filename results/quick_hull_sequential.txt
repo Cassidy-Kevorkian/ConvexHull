@@ -1,0 +1,16 @@
+circle_test, 100, 0.000034
+double_circle_test, 100, 0.000036
+square_test, 100, 0.000007
+circle_test, 1000, 0.000094
+double_circle_test, 1000, 0.000127
+square_test, 1000, 0.000038
+circle_test, 10000, 0.000945
+double_circle_test, 10000, 0.001574
+square_test, 10000, 0.000663
+circle_test, 100000, 0.007561
+double_circle_test, 100000, 0.011923
+square_test, 100000, 0.006402
+circle_test, 1000000, 0.062835
+double_circle_test, 1000000, 0.105901
+square_test, 1000000, 0.060895
+
