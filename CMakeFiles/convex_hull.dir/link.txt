@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/convex_hull.dir/main.cpp.o -o convex_hull  libquick_hull.a libquick_hull_parallel.a libpoints.a libgraham_scan.a
